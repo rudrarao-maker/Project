@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Schemes & Scholarships | Gov E-Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F2F4F7;
+      --text-primary: #1B4F72;
+      --text-secondary: #5A6C7D;
+      --border-color: #D1D5DB;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0F1419;
+      --bg-secondary: #1A1F2E;
+      --text-primary: #E8EAF6;
+      --text-secondary: #9CA3AF;
+      --border-color: #374151;
+    }
+
+    body {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    [data-theme="dark"] .bg-gray-50 { background-color: #0F1419; }
+    [data-theme="dark"] .bg-gray-100 { background-color: #1A1F2E; }
+    [data-theme="dark"] .bg-white { background-color: #1A1F2E; }
+    [data-theme="dark"] .text-gray-800 { color: #E8EAF6; }
+    [data-theme="dark"] .text-gray-700 { color: #E8EAF6; }
+    [data-theme="dark"] .text-gray-600 { color: #9CA3AF; }
+    [data-theme="dark"] .text-gray-500 { color: #9CA3AF; }
+    [data-theme="dark"] .border-gray-200 { border-color: #374151; }
+    [data-theme="dark"] .border-gray-300 { border-color: #4b5563; }
+    [data-theme="dark"] .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+    [data-theme="dark"] .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 50;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #1B4F72;
+      box-shadow: 0 10px 25px rgba(27, 79, 114, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    [data-theme="dark"] .dark-mode-toggle {
+      background: #2E5C8A;
+      box-shadow: 0 10px 25px rgba(46, 92, 138, 0.5);
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .scheme-card {
+      transition: all 0.3s ease;
+    }
+
+    .scheme-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header style="background-color: #1B4F72;" class="text-white sticky top-0 z-50 shadow-lg">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="flex items-center gap-3">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+        </svg>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold">All Schemes & Scholarships</h1>
+          <p class="text-xs text-cyan-100">Government of India</p>
+        </div>
+      </div>
+      <a href="Main.html" class="bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition-all flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"/>
+        </svg>
+        Back
+      </a>
+    </div>
+  </header>
+
+  <div class="container mx-auto px-4 md:px-6 py-8 max-w-7xl">
+
+    <!-- Page Title -->
+    <div class="mb-8 animate-fadeInUp">
+      <h2 class="text-4xl font-bold text-gray-800 mb-2">🎓 Schemes & Scholarships</h2>
+      <p class="text-gray-600">Explore all government schemes, scholarships, and welfare programs</p>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-fadeInUp">
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Search Schemes</label>
+          <input type="text" id="searchInput" placeholder="Search by name, category, or keyword..." class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+          <select id="categoryFilter" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+            <option value="all">All Categories</option>
+            <option value="education">Education</option>
+            <option value="women">Women Empowerment</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="health">Health</option>
+            <option value="employment">Employment</option>
+            <option value="housing">Housing</option>
+            <option value="social">Social Welfare</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Eligibility</label>
+          <select id="eligibilityFilter" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+            <option value="all">All</option>
+            <option value="students">Students</option>
+            <option value="women">Women</option>
+            <option value="farmers">Farmers</option>
+            <option value="senior">Senior Citizens</option>
+            <option value="general">General Public</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-lg">
+        <p class="text-3xl font-bold mb-1">50+</p>
+        <p class="text-sm text-blue-100">Total Schemes</p>
+      </div>
+      <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 shadow-lg">
+        <p class="text-3xl font-bold mb-1">25+</p>
+        <p class="text-sm text-green-100">Scholarships</p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 shadow-lg">
+        <p class="text-3xl font-bold mb-1">15+</p>
+        <p class="text-sm text-purple-100">Women Schemes</p>
+      </div>
+      <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl p-6 shadow-lg">
+        <p class="text-3xl font-bold mb-1">10+</p>
+        <p class="text-sm text-orange-100">Farmer Schemes</p>
+      </div>
+    </div>
+
+    <!-- Schemes Grid -->
+    <div id="schemesContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Schemes will be loaded here by JavaScript -->
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="hidden text-center py-16">
+      <svg class="w-24 h-24 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p class="text-xl font-bold text-gray-600 mb-2">No schemes found</p>
+      <p class="text-gray-500">Try adjusting your search or filters</p>
+    </div>
+
+  </div>
+
+  <!-- Dark Mode Toggle -->
+  <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle Dark Mode">
+    <svg id="sunIcon" class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+    </svg>
+    <svg id="moonIcon" class="w-7 h-7 hidden" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+    </svg>
+  </button>
+
+  <script>
+    // Schemes Data
+    const schemesData = [
+      // Education Scholarships
+      {
+        name: "National Scholarship Portal",
+        category: "education",
+        eligibility: "students",
+        description: "Central sector scheme for students from economically weaker sections pursuing higher education.",
+        benefits: "₹10,000 - ₹20,000 per year",
+        icon: "🎓",
+        color: "blue",
+        link: "https://scholarships.gov.in/"
+      },
+      {
+        name: "PM Scholarship Scheme",
+        category: "education",
+        eligibility: "students",
+        description: "Scholarship for wards of ex-servicemen, ex-coast guard personnel, and police officials.",
+        benefits: "₹2,500 per month",
+        icon: "🎖️",
+        color: "indigo",
+        link: "#"
+      },
+      {
+        name: "Post Matric Scholarship SC/ST",
+        category: "education",
+        eligibility: "students",
+        description: "Financial assistance to SC/ST students for post-matriculation studies.",
+        benefits: "Up to ₹1,20,000 per year",
+        icon: "📚",
+        color: "purple",
+        link: "#"
+      },
+      {
+        name: "Merit-cum-Means Scholarship",
+        category: "education",
+        eligibility: "students",
+        description: "For meritorious students from economically weaker sections in professional and technical courses.",
+        benefits: "₹20,000 per year",
+        icon: "🏆",
+        color: "green",
+        link: "#"
+      },
+      {
+        name: "Pre-Matric Scholarship",
+        category: "education",
+        eligibility: "students",
+        description: "Financial support for SC/ST/OBC students studying in classes 9th and 10th.",
+        benefits: "₹3,000 - ₹5,000 per year",
+        icon: "📖",
+        color: "teal",
+        link: "#"
+      },
+
+      // Women Empowerment
+      {
+        name: "Beti Bachao Beti Padhao",
+        category: "women",
+        eligibility: "women",
+        description: "Campaign to address declining child sex ratio and promote girl child education.",
+        benefits: "Education support & awareness",
+        icon: "👧",
+        color: "pink",
+        link: "#"
+      },
+      {
+        name: "Pradhan Mantri Matru Vandana Yojana",
+        category: "women",
+        eligibility: "women",
+        description: "Maternity benefit program providing cash incentive to pregnant and lactating mothers.",
+        benefits: "₹5,000 in installments",
+        icon: "🤱",
+        color: "rose",
+        link: "#"
+      },
+      {
+        name: "Sukanya Samriddhi Yojana",
+        category: "women",
+        eligibility: "women",
+        description: "Small deposit scheme for girl child with attractive interest rates and tax benefits.",
+        benefits: "8.2% interest rate",
+        icon: "💰",
+        color: "yellow",
+        link: "#"
+      },
+      {
+        name: "Mahila Shakti Kendra",
+        category: "women",
+        eligibility: "women",
+        description: "Empowerment of rural women through community participation and skill development.",
+        benefits: "Skill training & support",
+        icon: "💪",
+        color: "orange",
+        link: "#"
+      },
+      {
+        name: "Working Women Hostel",
+        category: "women",
+        eligibility: "women",
+        description: "Safe and affordable accommodation for working women in urban areas.",
+        benefits: "Subsidized accommodation",
+        icon: "🏠",
+        color: "red",
+        link: "#"
+      },
+
+      // Agriculture
+      {
+        name: "PM-KISAN",
+        category: "agriculture",
+        eligibility: "farmers",
+        description: "Income support to all landholding farmers' families across the country.",
+        benefits: "₹6,000 per year in 3 installments",
+        icon: "🌾",
+        color: "green",
+        link: "#"
+      },
+      {
+        name: "Pradhan Mantri Fasal Bima Yojana",
+        category: "agriculture",
+        eligibility: "farmers",
+        description: "Crop insurance scheme providing financial support to farmers in case of crop failure.",
+        benefits: "Crop insurance coverage",
+        icon: "🚜",
+        color: "lime",
+        link: "#"
+      },
+      {
+        name: "Kisan Credit Card",
+        category: "agriculture",
+        eligibility: "farmers",
+        description: "Credit facility for farmers to meet agricultural expenses and purchase inputs.",
+        benefits: "Low interest credit up to ₹3 lakh",
+        icon: "💳",
+        color: "emerald",
+        link: "#"
+      },
+      {
+        name: "Soil Health Card Scheme",
+        category: "agriculture",
+        eligibility: "farmers",
+        description: "Provides soil health information to farmers for improving productivity.",
+        benefits: "Free soil testing",
+        icon: "🌱",
+        color: "teal",
+        link: "#"
+      },
+
+      // Health
+      {
+        name: "Ayushman Bharat",
+        category: "health",
+        eligibility: "general",
+        description: "Health insurance scheme providing coverage of ₹5 lakh per family per year.",
+        benefits: "₹5 lakh health cover",
+        icon: "🏥",
+        color: "red",
+        link: "#"
+      },
+      {
+        name: "Janani Suraksha Yojana",
+        category: "health",
+        eligibility: "women",
+        description: "Safe motherhood intervention promoting institutional delivery among poor pregnant women.",
+        benefits: "Cash assistance for delivery",
+        icon: "👶",
+        color: "pink",
+        link: "#"
+      },
+      {
+        name: "National Health Mission",
+        category: "health",
+        eligibility: "general",
+        description: "Provides accessible, affordable and quality healthcare to rural and urban population.",
+        benefits: "Free healthcare services",
+        icon: "⚕️",
+        color: "blue",
+        link: "#"
+      },
+
+      // Employment
+      {
+        name: "MGNREGA",
+        category: "employment",
+        eligibility: "general",
+        description: "Guarantees 100 days of wage employment in a financial year to rural households.",
+        benefits: "100 days guaranteed work",
+        icon: "👷",
+        color: "orange",
+        link: "#"
+      },
+      {
+        name: "Pradhan Mantri Mudra Yojana",
+        category: "employment",
+        eligibility: "general",
+        description: "Provides loans up to ₹10 lakh to non-corporate small business sector.",
+        benefits: "Loans up to ₹10 lakh",
+        icon: "💼",
+        color: "indigo",
+        link: "#"
+      },
+      {
+        name: "Skill India Mission",
+        category: "employment",
+        eligibility: "general",
+        description: "Skill development initiative to train youth in industry-relevant skills.",
+        benefits: "Free skill training",
+        icon: "🎯",
+        color: "purple",
+        link: "#"
+      },
+      {
+        name: "Stand Up India",
+        category: "employment",
+        eligibility: "women",
+        description: "Facilitates bank loans for SC/ST and women entrepreneurs.",
+        benefits: "₹10 lakh - ₹1 crore loans",
+        icon: "🚀",
+        color: "cyan",
+        link: "#"
+      },
+
+      // Housing
+      {
+        name: "Pradhan Mantri Awas Yojana",
+        category: "housing",
+        eligibility: "general",
+        description: "Affordable housing scheme for urban and rural poor.",
+        benefits: "Subsidy up to ₹2.67 lakh",
+        icon: "🏘️",
+        color: "blue",
+        link: "#"
+      },
+      {
+        name: "Deendayal Antyodaya Yojana",
+        category: "housing",
+        eligibility: "general",
+        description: "Mission to reduce poverty through skill development and livelihood opportunities.",
+        benefits: "Housing & livelihood support",
+        icon: "🏡",
+        color: "green",
+        link: "#"
+      },
+
+      // Social Welfare
+      {
+        name: "National Pension Scheme",
+        category: "social",
+        eligibility: "senior",
+        description: "Pension scheme for all citizens providing retirement income.",
+        benefits: "Pension after retirement",
+        icon: "👴",
+        color: "gray",
+        link: "#"
+      },
+      {
+        name: "Atal Pension Yojana",
+        category: "social",
+        eligibility: "general",
+        description: "Pension scheme for unorganized sector workers.",
+        benefits: "₹1,000 - ₹5,000 monthly pension",
+        icon: "💵",
+        color: "blue",
+        link: "#"
+      },
+      {
+        name: "PM Jan Dhan Yojana",
+        category: "social",
+        eligibility: "general",
+        description: "Financial inclusion program ensuring access to banking facilities.",
+        benefits: "Free bank account & insurance",
+        icon: "🏦",
+        color: "teal",
+        link: "#"
+      },
+      {
+        name: "Swachh Bharat Mission",
+        category: "social",
+        eligibility: "general",
+        description: "Campaign to clean streets, roads and infrastructure of cities and rural areas.",
+        benefits: "Toilet construction subsidy",
+        icon: "🚽",
+        color: "green",
+        link: "#"
+      },
+      {
+        name: "Ujjwala Yojana",
+        category: "social",
+        eligibility: "women",
+        description: "Free LPG connections to women from BPL households.",
+        benefits: "Free LPG connection",
+        icon: "🔥",
+        color: "orange",
+        link: "#"
+      },
+      {
+        name: "Digital India",
+        category: "social",
+        eligibility: "general",
+        description: "Campaign to ensure government services are available electronically.",
+        benefits: "Digital infrastructure",
+        icon: "💻",
+        color: "blue",
+        link: "#"
+      },
+      {
+        name: "Make in India",
+        category: "employment",
+        eligibility: "general",
+        description: "Initiative to encourage companies to manufacture products in India.",
+        benefits: "Business opportunities",
+        icon: "🏭",
+        color: "indigo",
+        link: "#"
+      },
+      {
+        name: "Startup India",
+        category: "employment",
+        eligibility: "general",
+        description: "Flagship initiative to build a strong ecosystem for nurturing innovation.",
+        benefits: "Tax benefits & funding",
+        icon: "🌟",
+        color: "purple",
+        link: "#"
+      },
+      {
+        name: "National Rural Livelihood Mission",
+        category: "social",
+        eligibility: "general",
+        description: "Poverty alleviation project to create efficient institutions of the rural poor.",
+        benefits: "Livelihood support",
+        icon: "🌾",
+        color: "green",
+        link: "#"
+      }
+    ];
+
+    // Color mapping
+    const colorClasses = {
+      blue: 'from-blue-500 to-blue-600',
+      indigo: 'from-indigo-500 to-indigo-600',
+      purple: 'from-purple-500 to-purple-600',
+      green: 'from-green-500 to-green-600',
+      teal: 'from-teal-500 to-teal-600',
+      pink: 'from-pink-500 to-pink-600',
+      rose: 'from-rose-500 to-rose-600',
+      yellow: 'from-yellow-500 to-yellow-600',
+      orange: 'from-orange-500 to-orange-600',
+      red: 'from-red-500 to-red-600',
+      lime: 'from-lime-500 to-lime-600',
+      emerald: 'from-emerald-500 to-emerald-600',
+      cyan: 'from-cyan-500 to-cyan-600',
+      gray: 'from-gray-500 to-gray-600'
+    };
+
+    // Render schemes
+    function renderSchemes(schemes) {
+      const container = document.getElementById('schemesContainer');
+      const noResults = document.getElementById('noResults');
+      
+      if (schemes.length === 0) {
+        container.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+      }
+      
+      noResults.classList.add('hidden');
+      container.innerHTML = schemes.map(scheme => `
+        <div class="scheme-card bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-gradient-to-r ${colorClasses[scheme.color]} p-6 text-white">
+            <div class="text-5xl mb-3">${scheme.icon}</div>
+            <h3 class="text-xl font-bold mb-2">${scheme.name}</h3>
+            <span class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold uppercase">
+              ${scheme.category}
+            </span>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-600 mb-4 text-sm leading-relaxed">${scheme.description}</p>
+            <div class="mb-4">
+              <p class="text-xs text-gray-500 mb-1">Benefits:</p>
+              <p class="font-bold text-teal-600">${scheme.benefits}</p>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-semibold">
+                For: ${scheme.eligibility.charAt(0).toUpperCase() + scheme.eligibility.slice(1)}
+              </span>
+              <a href="${scheme.link}" target="_blank" class="inline-flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-all text-sm font-semibold">
+                Apply Now
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter schemes
+    function filterSchemes() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const eligibility = document.getElementById('eligibilityFilter').value;
+
+      const filtered = schemesData.filter(scheme => {
+        const matchesSearch = scheme.name.toLowerCase().includes(searchTerm) || 
+                            scheme.description.toLowerCase().includes(searchTerm) ||
+                            scheme.benefits.toLowerCase().includes(searchTerm);
+        const matchesCategory = category === 'all' || scheme.category === category;
+        const matchesEligibility = eligibility === 'all' || scheme.eligibility === eligibility;
+        
+        return matchesSearch && matchesCategory && matchesEligibility;
+      });
+
+      renderSchemes(filtered);
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', filterSchemes);
+    document.getElementById('categoryFilter').addEventListener('change', filterSchemes);
+    document.getElementById('eligibilityFilter').addEventListener('change', filterSchemes);
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+    const htmlElement = document.documentElement;
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    if (currentTheme === 'dark') {
+      htmlElement.setAttribute('data-theme', 'dark');
+      sunIcon.classList.add('hidden');
+      moonIcon.classList.remove('hidden');
+    }
+
+    darkModeToggle.addEventListener('click', function() {
+      if (htmlElement.getAttribute('data-theme') === 'dark') {
+        htmlElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+    });
+
+    // Initial render
+    renderSchemes(schemesData);
+  </script>
+</body>
+</html>

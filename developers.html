@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet Our Developers - Gov E-Services Portal</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Government Portal Theme */
+    :root {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F2F4F7;
+      --text-primary: #1B4F72;
+      --text-secondary: #5A6C7D;
+      --button-primary: #1B4F72;
+      --button-hover: #154360;
+      --border-color: #D5DBDB;
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0F1419;
+      --bg-secondary: #1A1F2E;
+      --text-primary: #E8EAF6;
+      --text-secondary: #9CA3AF;
+      --button-primary: #2E5C8A;
+      --button-hover: #3A7BC8;
+      --border-color: #374151;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    /* Developer Card Styles */
+    .dev-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dev-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #1B4F72, #2E5C8A, #3A7BC8);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .dev-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .dev-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    [data-theme="dark"] .dev-card:hover {
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Avatar Styles */
+    .dev-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1B4F72, #2E5C8A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: white;
+      margin: 0 auto 24px;
+      position: relative;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      border: 4px solid var(--bg-primary);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .dev-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .dev-card:hover .dev-avatar {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .dev-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1B4F72, #2E5C8A, #3A7BC8);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .dev-card:hover .dev-avatar::after {
+      opacity: 1;
+      animation: rotate 3s linear infinite;
+    }
+
+    /* Fallback for missing images */
+    .dev-avatar-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      background: linear-gradient(135deg, #1B4F72, #2E5C8A);
+      color: white;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Social Links */
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      color: var(--text-primary);
+    }
+
+    .social-link:hover {
+      background: var(--button-primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    /* Skill Badge */
+    .skill-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      margin: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .skill-badge:hover {
+      background: var(--button-primary);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Stats Counter */
+    .stat-item {
+      text-align: center;
+      padding: 16px;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1B4F72, #2E5C8A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Dark Mode Toggle */
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 50;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--button-primary);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Timeline */
+    .timeline-item {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--button-primary);
+      border: 3px solid var(--bg-primary);
+      box-shadow: 0 0 0 3px var(--bg-secondary);
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 24px;
+      width: 2px;
+      height: calc(100% + 8px);
+      background: var(--border-color);
+    }
+
+    .timeline-item:last-child::after {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header style="background-color: #1B4F72;" class="text-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <a href="Main.html" class="text-2xl hover:opacity-80 transition">
+            <i class="fas fa-arrow-left"></i>
+          </a>
+          <div>
+            <h1 class="text-2xl font-bold">Meet Our Developers</h1>
+            <p class="text-sm opacity-90">The team behind Gov E-Services Portal</p>
+          </div>
+        </div>
+        <a href="Main.html" class="hidden md:block bg-white text-blue-900 px-6 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
+          <i class="fas fa-home mr-2"></i>Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-16 md:py-24" style="background: linear-gradient(135deg, #1B4F72, #2E5C8A);">
+    <div class="container mx-auto px-4 text-center text-white">
+      <div class="animate-fadeInUp">
+        <h2 class="text-4xl md:text-6xl font-bold mb-6">
+          Built with <span class="text-red-400">❤️</span> by Our Team
+        </h2>
+        <p class="text-lg md:text-xl mb-8 opacity-90 max-w-3xl mx-auto">
+          Meet the talented 3-member team who designed and developed this comprehensive government e-services portal to serve millions of citizens across India.
+        </p>
+      </div>
+
+      <!-- Project Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 max-w-4xl mx-auto">
+        <div class="stat-item bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+          <div class="stat-number text-white">25+</div>
+          <div class="text-sm opacity-90">Pages Built</div>
+        </div>
+        <div class="stat-item bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+          <div class="stat-number text-white">500+</div>
+          <div class="text-sm opacity-90">Services</div>
+        </div>
+        <div class="stat-item bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+          <div class="stat-number text-white">100%</div>
+          <div class="text-sm opacity-90">Responsive</div>
+        </div>
+        <div class="stat-item bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+          <div class="stat-number text-white">24/7</div>
+          <div class="text-sm opacity-90">Available</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developers Section -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Our Development Team</h3>
+        <p class="text-lg" style="color: var(--text-secondary);">Skilled professionals dedicated to digital governance</p>
+      </div>
+
+      <!-- Developer Cards Grid -->
+      <div id="developersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Developer cards will be loaded here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Technologies Used -->
+  <section class="py-16" style="background-color: var(--bg-primary);">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Technologies We Used</h3>
+        <p class="text-lg" style="color: var(--text-secondary);">Modern tech stack for a robust platform</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-5xl mx-auto">
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">🌐</div>
+          <h4 class="font-bold mb-1">HTML5</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Structure</p>
+        </div>
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">🎨</div>
+          <h4 class="font-bold mb-1">CSS3</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Styling</p>
+        </div>
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">⚡</div>
+          <h4 class="font-bold mb-1">JavaScript</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Interactivity</p>
+        </div>
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">🐘</div>
+          <h4 class="font-bold mb-1">PHP</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Backend</p>
+        </div>
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">🗄️</div>
+          <h4 class="font-bold mb-1">MySQL</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Database</p>
+        </div>
+        <div class="text-center p-6 rounded-xl" style="background: var(--bg-secondary);">
+          <div class="text-5xl mb-3">🎯</div>
+          <h4 class="font-bold mb-1">Tailwind</h4>
+          <p class="text-xs" style="color: var(--text-secondary);">Framework</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Timeline -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Development Journey</h3>
+        <p class="text-lg" style="color: var(--text-secondary);">From concept to completion</p>
+      </div>
+
+      <div class="max-w-3xl mx-auto">
+        <div class="timeline-item">
+          <h4 class="font-bold text-lg mb-2">Phase 1: Planning & Design</h4>
+          <p style="color: var(--text-secondary);">Researched user needs, designed UI/UX, and created wireframes for all major pages.</p>
+        </div>
+        <div class="timeline-item">
+          <h4 class="font-bold text-lg mb-2">Phase 2: Core Development</h4>
+          <p style="color: var(--text-secondary);">Built homepage, authentication system, user dashboard, and admin panel with modern design.</p>
+        </div>
+        <div class="timeline-item">
+          <h4 class="font-bold text-lg mb-2">Phase 3: Feature Integration</h4>
+          <p style="color: var(--text-secondary);">Added document upload, office locator, schemes portal, and notification system.</p>
+        </div>
+        <div class="timeline-item">
+          <h4 class="font-bold text-lg mb-2">Phase 4: Enhancement</h4>
+          <p style="color: var(--text-secondary);">Implemented dark mode, responsive design, hero slider, and all services page.</p>
+        </div>
+        <div class="timeline-item">
+          <h4 class="font-bold text-lg mb-2">Phase 5: Testing & Launch</h4>
+          <p style="color: var(--text-secondary);">Comprehensive testing, bug fixes, optimization, and final deployment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-16" style="background: linear-gradient(135deg, #1B4F72, #2E5C8A);">
+    <div class="container mx-auto px-4 text-center text-white">
+      <h3 class="text-3xl md:text-4xl font-bold mb-6">Want to Contribute?</h3>
+      <p class="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+        We're always looking for talented developers to help improve this platform and serve citizens better.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="contact.html" class="bg-white text-blue-900 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all hover:scale-105 shadow-lg">
+          <i class="fas fa-envelope mr-2"></i>Get in Touch
+        </a>
+        <a href="Main.html" class="bg-white/10 backdrop-blur-lg text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all hover:scale-105 border-2 border-white/30">
+          <i class="fas fa-home mr-2"></i>Back to Home
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background-color: #0F1419;" class="text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <p class="mb-2">© 2026 Gov E-Services Portal. All rights reserved.</p>
+      <p class="text-sm opacity-75">Made with ❤️ for Digital India</p>
+    </div>
+  </footer>
+
+  <!-- Dark Mode Toggle -->
+  <button id="darkModeToggle" class="dark-mode-toggle">
+    <i class="fas fa-moon text-xl"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+    // Developers Data (Customize this with actual team members)
+    const developers = [
+      {
+        name: 'Team Member 1',
+        role: 'Full Stack Developer',
+        avatar: '👨‍💻',
+        image: 'img/team/member1.jpeg', // Add your image path here
+        bio: 'Lead developer responsible for architecture, backend, and frontend development of the entire platform.',
+        skills: ['PHP', 'MySQL', 'JavaScript', 'HTML/CSS', 'Tailwind', 'API Development'],
+        github: '#',
+        linkedin: 'https://www.linkedin.com/in/rao-rudra-09706a306?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+        email: '24172012074@gnu.ac.in'
+      },
+      {
+        name: 'Team Member 2',
+        role: 'Frontend Developer & Designer',
+        avatar: '👩‍💻',
+        image: 'img/team/member2.jpeg', // Add your image path here
+        bio: 'Designed and developed beautiful, responsive user interfaces with modern animations and dark mode.',
+        skills: ['HTML5', 'CSS3', 'JavaScript', 'UI/UX Design', 'Responsive Design', 'Tailwind'],
+        github: '#',
+        linkedin: '#',
+        email: '24172012061@gnu.ac.in'
+      },
+      {
+        name: 'Team Member 3',
+        role: 'Backend Developer & Database Specialist',
+        avatar: '🧑‍💻',
+        image: 'img/team/member3.jpeg', // Add your image path here
+        bio: 'Built robust APIs, database architecture, and implemented security features for the platform.',
+        skills: ['PHP', 'MySQL', 'Database Design', 'Security', 'API Development', 'Optimization'],
+        github: '#',
+        linkedin: '#',
+        email: '24172012066@gnu.ac.in'
+      }
+    ];
+
+    // Display Developers
+    function displayDevelopers() {
+      const container = document.getElementById('developersGrid');
+      
+      container.innerHTML = developers.map(dev => {
+        // Create avatar HTML - try image first, fallback to emoji
+        const avatarHTML = dev.image 
+          ? `<img src="${dev.image}" alt="${dev.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <div class="dev-avatar-fallback" style="display: none;">${dev.avatar}</div>`
+          : `<div class="dev-avatar-fallback">${dev.avatar}</div>`;
+        
+        return `
+          <div class="dev-card animate-fadeInUp">
+            <div class="dev-avatar animate-float">
+              ${avatarHTML}
+            </div>
+            
+            <h3 class="text-2xl font-bold text-center mb-2">${dev.name}</h3>
+            <p class="text-center mb-4" style="color: var(--button-primary); font-weight: 600;">${dev.role}</p>
+            
+            <p class="text-center mb-6" style="color: var(--text-secondary); font-size: 14px;">
+              ${dev.bio}
+            </p>
+            
+            <!-- Skills -->
+            <div class="flex flex-wrap justify-center mb-6">
+              ${dev.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}
+            </div>
+            
+            <!-- Social Links -->
+            <div class="flex justify-center gap-3">
+              <a href="${dev.github}" class="social-link" title="GitHub">
+                <i class="fab fa-github"></i>
+              </a>
+              <a href="${dev.linkedin}" class="social-link" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href="mailto:${dev.email}" class="social-link" title="Email">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Dark Mode
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    
+    if (localStorage.getItem('theme') === 'dark') {
+      html.setAttribute('data-theme', 'dark');
+      darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        darkModeToggle.innerHTML = '<i class="fas fa-moon text-xl"></i>';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+      }
+    });
+
+    // Initialize
+    displayDevelopers();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Review - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F2F4F7;
+            --text-primary: #1B4F72;
+            --text-secondary: #5A6C7D;
+            --border-color: #D1D5DB;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #0F1419;
+            --bg-secondary: #1A1F2E;
+            --text-primary: #E8EAF6;
+            --text-secondary: #9CA3AF;
+            --border-color: #374151;
+        }
+        
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #1B4F72;
+            color: white;
+        }
+        
+        [data-theme="dark"] .btn-primary {
+            background: #2E5C8A;
+        }
+        
+        .btn-approve {
+            background: #10B981;
+            color: white;
+        }
+        
+        .btn-reject {
+            background: #EF4444;
+            color: white;
+        }
+        
+        .status-pending { 
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-approved { 
+            background: #D1FAE5;
+            color: #065F46;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-rejected { 
+            background: #FEE2E2;
+            color: #991B1B;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        [data-theme="dark"] .status-pending {
+            background: #78350F;
+            color: #FEF3C7;
+        }
+        
+        [data-theme="dark"] .status-approved {
+            background: #064E3B;
+            color: #D1FAE5;
+        }
+        
+        [data-theme="dark"] .status-rejected {
+            background: #7F1D1D;
+            color: #FEE2E2;
+        }
+        
+        .document-card {
+            transition: all 0.3s ease;
+        }
+        
+        .document-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .preview-modal {
+            backdrop-filter: blur(5px);
+        }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #1B4F72;
+            color: #1B4F72;
+            font-weight: 600;
+        }
+        
+        [data-theme="dark"] .tab-button.active {
+            border-bottom-color: #2E5C8A;
+            color: #E8EAF6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="card shadow-md mb-6">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <a href="admin_panel.html" class="text-2xl hover:opacity-80">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h1 class="text-2xl font-bold">Document Review</h1>
+                </div>
+                <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="fas fa-moon text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="card rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm" style="color: var(--text-secondary)">Total Documents</p>
+                        <h3 class="text-3xl font-bold mt-2" id="totalDocuments">0</h3>
+                    </div>
+                    <i class="fas fa-file-alt text-4xl opacity-20"></i>
+                </div>
+            </div>
+            
+            <div class="card rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm" style="color: var(--text-secondary)">Pending Review</p>
+                        <h3 class="text-3xl font-bold mt-2 text-yellow-600" id="pendingDocuments">0</h3>
+                    </div>
+                    <i class="fas fa-clock text-4xl opacity-20"></i>
+                </div>
+            </div>
+            
+            <div class="card rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm" style="color: var(--text-secondary)">Approved</p>
+                        <h3 class="text-3xl font-bold mt-2 text-green-600" id="approvedDocuments">0</h3>
+                    </div>
+                    <i class="fas fa-check-circle text-4xl opacity-20"></i>
+                </div>
+            </div>
+            
+            <div class="card rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm" style="color: var(--text-secondary)">Rejected</p>
+                        <h3 class="text-3xl font-bold mt-2 text-red-600" id="rejectedDocuments">0</h3>
+                    </div>
+                    <i class="fas fa-times-circle text-4xl opacity-20"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="card rounded-lg shadow-md mb-6">
+            <div class="flex border-b" style="border-color: var(--border-color)">
+                <button class="tab-button active" onclick="switchTab('pending')">
+                    <i class="fas fa-clock mr-2"></i>Pending Review
+                </button>
+                <button class="tab-button" onclick="switchTab('approved')">
+                    <i class="fas fa-check-circle mr-2"></i>Approved
+                </button>
+                <button class="tab-button" onclick="switchTab('rejected')">
+                    <i class="fas fa-times-circle mr-2"></i>Rejected
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card rounded-lg shadow-md p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search by name, email, document..." class="w-full px-4 py-2 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-color)">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Document Type</label>
+                    <select id="filterDocType" class="w-full px-4 py-2 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-color)">
+                        <option value="">All Types</option>
+                        <option value="Aadhaar Card">Aadhaar Card</option>
+                        <option value="PAN Card">PAN Card</option>
+                        <option value="Voter ID">Voter ID</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Driving License">Driving License</option>
+                        <option value="Birth Certificate">Birth Certificate</option>
+                        <option value="Address Proof">Address Proof</option>
+                        <option value="Income Certificate">Income Certificate</option>
+                        <option value="Photo">Photo</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Date Range</label>
+                    <input type="date" id="filterDate" class="w-full px-4 py-2 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-color)">
+                </div>
+                
+                <div class="flex items-end">
+                    <button onclick="applyFilters()" class="btn-primary px-6 py-2 rounded-lg w-full">
+                        <i class="fas fa-filter mr-2"></i>Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Grid -->
+        <div id="documentsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading State -->
+            <div class="col-span-full text-center py-12">
+                <i class="fas fa-spinner fa-spin text-4xl mb-4" style="color: var(--text-secondary)"></i>
+                <p style="color: var(--text-secondary)">Loading documents...</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-8">
+            <button id="prevBtn" onclick="previousPage()" class="btn-primary px-4 py-2 rounded-lg" disabled>
+                <i class="fas fa-chevron-left mr-2"></i>Previous
+            </button>
+            <span id="pageInfo">Page 1</span>
+            <button id="nextBtn" onclick="nextPage()" class="btn-primary px-4 py-2 rounded-lg">
+                Next<i class="fas fa-chevron-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Document Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 preview-modal">
+        <div class="card rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b" style="border-color: var(--border-color)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-2xl font-bold">Document Review</h3>
+                    <button onclick="closePreviewModal()" class="text-2xl hover:opacity-70">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- User Information -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3">User Information</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Name</p>
+                            <p class="font-semibold" id="modalUserName">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Email</p>
+                            <p class="font-semibold" id="modalUserEmail">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Mobile</p>
+                            <p class="font-semibold" id="modalUserMobile">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Application ID</p>
+                            <p class="font-semibold" id="modalAppId">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Information -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3">Document Information</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Document Type</p>
+                            <p class="font-semibold" id="modalDocType">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">File Name</p>
+                            <p class="font-semibold" id="modalFileName">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">File Size</p>
+                            <p class="font-semibold" id="modalFileSize">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm" style="color: var(--text-secondary)">Uploaded Date</p>
+                            <p class="font-semibold" id="modalUploadDate">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Preview -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3">Document Preview</h4>
+                    <div id="documentPreview" class="border rounded-lg p-4 text-center" style="border-color: var(--border-color); min-height: 300px;">
+                        <p style="color: var(--text-secondary)">Loading preview...</p>
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3">Review Decision</h4>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Remarks / Comments</label>
+                        <textarea id="reviewRemarks" rows="4" placeholder="Enter your remarks here..." class="w-full px-4 py-2 rounded-lg border" style="background: var(--bg-primary); border-color: var(--border-color)"></textarea>
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="approveDocument()" class="btn-approve px-6 py-3 rounded-lg flex-1">
+                            <i class="fas fa-check mr-2"></i>Approve Document
+                        </button>
+                        <button onclick="rejectDocument()" class="btn-reject px-6 py-3 rounded-lg flex-1">
+                            <i class="fas fa-times mr-2"></i>Reject Document
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentTab = 'pending';
+        let currentDocumentId = null;
+        const limit = 12;
+
+        // Dark Mode
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon text-xl"></i>';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+            }
+        });
+
+        // Load documents
+        function loadDocuments() {
+            const offset = (currentPage - 1) * limit;
+            const url = `api/get_pending_documents.php?status=${currentTab}&limit=${limit}&offset=${offset}`;
+            
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        updateStatistics(data.stats);
+                        displayDocuments(data.documents);
+                        updatePagination(data.total);
+                    } else {
+                        showError(data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    showError('Failed to load documents');
+                });
+        }
+
+        function updateStatistics(stats) {
+            document.getElementById('totalDocuments').textContent = stats.total;
+            document.getElementById('pendingDocuments').textContent = stats.pending;
+            document.getElementById('approvedDocuments').textContent = stats.approved;
+            document.getElementById('rejectedDocuments').textContent = stats.rejected;
+        }
+
+        function displayDocuments(documents) {
+            const container = document.getElementById('documentsContainer');
+            
+            if (documents.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-folder-open text-6xl mb-4" style="color: var(--text-secondary)"></i>
+                        <p class="text-xl" style="color: var(--text-secondary)">No documents found</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = documents.map(doc => `
+                <div class="card rounded-lg shadow-md p-6 document-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg mb-1">${doc.document_type}</h3>
+                            <p class="text-sm" style="color: var(--text-secondary)">${doc.user_name}</p>
+                        </div>
+                        <span class="status-${doc.status}">${doc.status.toUpperCase()}</span>
+                    </div>
+                    
+                    <div class="space-y-2 mb-4">
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-envelope w-5" style="color: var(--text-secondary)"></i>
+                            <span class="truncate">${doc.email || 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-phone w-5" style="color: var(--text-secondary)"></i>
+                            <span>${doc.mobile || 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-file w-5" style="color: var(--text-secondary)"></i>
+                            <span class="truncate">${doc.document_name}</span>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-calendar w-5" style="color: var(--text-secondary)"></i>
+                            <span>${new Date(doc.uploaded_at).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    
+                    ${doc.status === 'pending' ? `
+                        <button onclick="openPreviewModal(${doc.id})" class="btn-primary w-full py-2 rounded-lg">
+                            <i class="fas fa-eye mr-2"></i>Review Document
+                        </button>
+                    ` : `
+                        <button onclick="openPreviewModal(${doc.id})" class="btn-primary w-full py-2 rounded-lg">
+                            <i class="fas fa-eye mr-2"></i>View Details
+                        </button>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        function updatePagination(total) {
+            totalPages = Math.ceil(total / limit);
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            currentPage = 1;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.tab-button').classList.add('active');
+            
+            loadDocuments();
+        }
+
+        function applyFilters() {
+            currentPage = 1;
+            loadDocuments();
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadDocuments();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadDocuments();
+            }
+        }
+
+        function openPreviewModal(documentId) {
+            currentDocumentId = documentId;
+            
+            // Fetch document details
+            fetch(`api/get_pending_documents.php?status=${currentTab}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const doc = data.documents.find(d => d.id === documentId);
+                        if (doc) {
+                            displayDocumentDetails(doc);
+                            document.getElementById('previewModal').classList.remove('hidden');
+                            document.getElementById('previewModal').classList.add('flex');
+                        }
+                    }
+                })
+                .catch(err => console.error('Error:', err));
+        }
+
+        function displayDocumentDetails(doc) {
+            document.getElementById('modalUserName').textContent = doc.user_name;
+            document.getElementById('modalUserEmail').textContent = doc.email || 'N/A';
+            document.getElementById('modalUserMobile').textContent = doc.mobile || 'N/A';
+            document.getElementById('modalAppId').textContent = doc.application_id || 'N/A';
+            document.getElementById('modalDocType').textContent = doc.document_type;
+            document.getElementById('modalFileName').textContent = doc.document_name;
+            document.getElementById('modalFileSize').textContent = formatFileSize(doc.file_size);
+            document.getElementById('modalUploadDate').textContent = new Date(doc.uploaded_at).toLocaleString();
+            
+            // Display preview
+            const previewContainer = document.getElementById('documentPreview');
+            const fileExt = doc.file_path.split('.').pop().toLowerCase();
+            
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExt)) {
+                previewContainer.innerHTML = `<img src="${doc.file_path}" alt="Document" class="max-w-full h-auto rounded-lg">`;
+            } else if (fileExt === 'pdf') {
+                previewContainer.innerHTML = `
+                    <embed src="${doc.file_path}" type="application/pdf" width="100%" height="500px" class="rounded-lg">
+                    <p class="mt-2"><a href="${doc.file_path}" target="_blank" class="text-blue-600 hover:underline">
+                        <i class="fas fa-external-link-alt mr-1"></i>Open in new tab
+                    </a></p>
+                `;
+            } else {
+                previewContainer.innerHTML = `
+                    <div class="py-12">
+                        <i class="fas fa-file text-6xl mb-4" style="color: var(--text-secondary)"></i>
+                        <p style="color: var(--text-secondary)">Preview not available</p>
+                        <a href="${doc.file_path}" download class="btn-primary px-6 py-2 rounded-lg inline-block mt-4">
+                            <i class="fas fa-download mr-2"></i>Download File
+                        </a>
+                    </div>
+                `;
+            }
+            
+            // Pre-fill remarks if already reviewed
+            if (doc.admin_remarks) {
+                document.getElementById('reviewRemarks').value = doc.admin_remarks;
+            } else {
+                document.getElementById('reviewRemarks').value = '';
+            }
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').classList.add('hidden');
+            document.getElementById('previewModal').classList.remove('flex');
+            currentDocumentId = null;
+        }
+
+        function approveDocument() {
+            reviewDocument('approved');
+        }
+
+        function rejectDocument() {
+            const remarks = document.getElementById('reviewRemarks').value.trim();
+            if (!remarks) {
+                alert('Please provide remarks for rejection');
+                return;
+            }
+            reviewDocument('rejected');
+        }
+
+        function reviewDocument(status) {
+            const remarks = document.getElementById('reviewRemarks').value.trim();
+            
+            if (!currentDocumentId) {
+                alert('No document selected');
+                return;
+            }
+            
+            fetch('api/review_document.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    document_id: currentDocumentId,
+                    status: status,
+                    remarks: remarks
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    closePreviewModal();
+                    loadDocuments();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Failed to review document');
+            });
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        function showError(message) {
+            const container = document.getElementById('documentsContainer');
+            container.innerHTML = `
+                <div class="col-span-full text-center py-12">
+                    <i class="fas fa-exclamation-triangle text-6xl mb-4 text-red-500"></i>
+                    <p class="text-xl text-red-600">${message}</p>
+                </div>
+            `;
+        }
+
+        // Load on page load
+        loadDocuments();
+    </script>
+</body>
+</html>

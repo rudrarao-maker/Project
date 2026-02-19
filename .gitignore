@@ -1,0 +1,30 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Uploads folder (user uploaded files)
+uploads/*
+!uploads/.htaccess
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Database credentials (if any)
+api/config.php
+
+# Node modules (if any)
+node_modules/
+
+# Backup files
+*.bak
+*.backup
