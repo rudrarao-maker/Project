@@ -1,0 +1,203 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    DATABASE IMPORT GUIDE
+                    Gov E-Services Portal
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 QUICK START - 3 SIMPLE STEPS
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: Start XAMPP
+-------------------
+1. Open XAMPP Control Panel
+2. Start Apache
+3. Start MySQL
+4. Wait for both to show "Running" status
+
+
+STEP 2: Import Database
+------------------------
+METHOD A - Using phpMyAdmin (Recommended):
+1. Open browser: http://localhost/phpmyadmin
+2. Click "Import" tab at the top
+3. Click "Choose File" button
+4. Select: COMPLETE_DATABASE_IMPORT.sql
+5. Click "Go" button at the bottom
+6. Wait for "Import has been successfully finished" message
+
+METHOD B - Using MySQL Command Line:
+1. Open Command Prompt
+2. Navigate to project folder:
+   cd C:\xampp\htdocs\Project
+3. Run command:
+   C:\xampp\mysql\bin\mysql -u root -p < COMPLETE_DATABASE_IMPORT.sql
+4. Press Enter (no password by default)
+
+
+STEP 3: Configure Database Connection
+--------------------------------------
+1. Open file: api/config.php
+2. Update these lines:
+   $host = 'localhost';
+   $dbname = 'gov_eservices_database';
+   $username = 'root';
+   $password = '';  // Leave empty for XAMPP default
+3. Save the file
+
+
+✅ VERIFICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+After import, verify in phpMyAdmin:
+1. Database "gov_eservices_database" should exist
+2. Should have 9 tables:
+   ✓ admins
+   ✓ users
+   ✓ services
+   ✓ service_applications
+   ✓ schemes
+   ✓ user_saved_schemes
+   ✓ notifications
+   ✓ document_uploads
+   ✓ admin_activity_log
+
+3. Should have 2 stored procedures:
+   ✓ create_application
+   ✓ log_admin_activity
+
+4. Should have 2 views:
+   ✓ admin_dashboard_stats
+   ✓ user_application_summary
+
+
+🔑 DEFAULT LOGIN CREDENTIALS
+═══════════════════════════════════════════════════════════════════════════════
+
+ADMIN PANEL:
+------------
+URL: http://localhost/Project/admin_panel.html
+Email: admin@gov.in
+Password: password
+
+SUPER ADMIN:
+------------
+Email: superadmin@gov.in
+Password: password
+
+DOCUMENT REVIEWER:
+------------------
+Email: reviewer@gov.in
+Password: password
+
+USER PORTAL:
+------------
+URL: http://localhost/Project/Main.html
+Email: test@example.com
+Password: password
+
+
+📊 WHAT'S INCLUDED
+═══════════════════════════════════════════════════════════════════════════════
+
+TABLES (9):
+-----------
+1. admins - Administrative users (3 sample admins)
+2. users - Citizen users (3 sample users)
+3. services - Government services (12 services)
+4. service_applications - Application tracking
+5. schemes - Government schemes (20 schemes)
+6. user_saved_schemes - Bookmarked schemes
+7. notifications - Email/SMS notifications
+8. document_uploads - Document verification
+9. admin_activity_log - Admin audit trail
+
+STORED PROCEDURES (2):
+----------------------
+1. create_application() - Auto-generate application numbers
+2. log_admin_activity() - Log admin actions
+
+DATABASE VIEWS (2):
+-------------------
+1. admin_dashboard_stats - Real-time statistics
+2. user_application_summary - User application summary
+
+SAMPLE DATA:
+------------
+✓ 3 Admin accounts (Super Admin, Admin, Reviewer)
+✓ 3 User accounts (Test users)
+✓ 12 Government services (Aadhaar, PAN, Passport, etc.)
+✓ 20 Government schemes (Central and State schemes)
+
+
+🔧 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+PROBLEM: Import fails with "Access Denied"
+SOLUTION: Make sure MySQL is running in XAMPP
+
+PROBLEM: Database already exists error
+SOLUTION: The script automatically drops existing database. If error persists:
+1. Go to phpMyAdmin
+2. Select "gov_eservices_database"
+3. Click "Drop" tab
+4. Confirm deletion
+5. Re-import the SQL file
+
+PROBLEM: "Unknown database" error
+SOLUTION: Make sure you selected "Import" from phpMyAdmin home, not from inside a database
+
+PROBLEM: Timeout during import
+SOLUTION: 
+1. In phpMyAdmin, click "Import" tab
+2. Scroll down to "Partial import"
+3. Increase "Number of queries to skip" to 0
+4. Increase timeout in php.ini:
+   max_execution_time = 300
+   max_input_time = 300
+
+PROBLEM: Can't login after import
+SOLUTION:
+1. Verify database was imported successfully
+2. Check api/config.php has correct database name
+3. Clear browser cache
+4. Try default credentials listed above
+
+
+📁 FILE STRUCTURE
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPLETE_DATABASE_IMPORT.sql
+├── Part 1: Core Tables (admins, users)
+├── Part 2: Service Tables (services, applications)
+├── Part 3: Scheme Tables (schemes, saved schemes)
+├── Part 4: Support Tables (notifications, documents, logs)
+├── Part 5: Sample Data (admins, users, services, schemes)
+├── Part 6: Stored Procedures
+└── Part 7: Database Views
+
+
+🔐 SECURITY NOTES
+═══════════════════════════════════════════════════════════════════════════════
+
+⚠️ IMPORTANT: Change default passwords immediately!
+
+1. Login as admin
+2. Go to profile settings
+3. Change password
+4. Repeat for all default accounts
+
+Default password "password" is for testing only!
+
+
+📞 NEED HELP?
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Check XAMPP is running (Apache + MySQL)
+2. Verify database name in api/config.php
+3. Check phpMyAdmin for successful import
+4. Clear browser cache and try again
+5. Check error logs in XAMPP control panel
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                    DATABASE READY TO USE!
+═══════════════════════════════════════════════════════════════════════════════
