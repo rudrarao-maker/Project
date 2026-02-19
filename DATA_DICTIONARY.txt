@@ -12,23 +12,26 @@ Last Updated: February 19, 2026
                               TABLE OF CONTENTS
 ═══════════════════════════════════════════════════════════════════════════════
 
-1. USERS TABLE
-2. SERVICES TABLE
-3. SERVICE_APPLICATIONS TABLE
-4. SCHEMES TABLE
-5. USER_SAVED_SCHEMES TABLE
-6. NOTIFICATIONS TABLE
-7. DOCUMENT_UPLOADS TABLE
-8. STORED PROCEDURES
-9. INDEXES AND CONSTRAINTS
-10. RELATIONSHIPS DIAGRAM
+1. ADMINS TABLE
+2. USERS TABLE
+3. SERVICES TABLE
+4. SERVICE_APPLICATIONS TABLE
+5. SCHEMES TABLE
+6. USER_SAVED_SCHEMES TABLE
+7. NOTIFICATIONS TABLE
+8. DOCUMENT_UPLOADS TABLE
+9. ADMIN_ACTIVITY_LOG TABLE
+10. STORED PROCEDURES
+11. DATABASE VIEWS
+12. INDEXES AND CONSTRAINTS
+13. RELATIONSHIPS DIAGRAM
 
 ═══════════════════════════════════════════════════════════════════════════════
-                           1. USERS TABLE
+                           1. ADMINS TABLE
 ═══════════════════════════════════════════════════════════════════════════════
 
-Table Name: users
-Description: Stores user account information for citizens, officers, and admins
+Table Name: admins
+Description: Stores administrative user accounts (super admins, admins, officers, reviewers)
 Primary Key: id
 Engine: InnoDB
 Charset: utf8mb4
@@ -38,46 +41,125 @@ COLUMNS:
 
 Column Name         Data Type       Null    Default             Description
 -------------------------------------------------------------------------------
-id                  INT             NO      AUTO_INCREMENT      Unique user identifier
-name                VARCHAR(100)    NO      -                   Full name of user
+id                  INT             NO      AUTO_INCREMENT      Unique admin identifier
+admin_id            VARCHAR(20)     NO      -                   Admin code (e.g., ADM001)
+name                VARCHAR(100)    NO      -                   Full name of admin
 email               VARCHAR(100)    NO      -                   Email address (unique)
 mobile              VARCHAR(15)     NO      -                   Mobile number (unique)
-aadhaar_number      VARCHAR(12)     YES     NULL                Aadhaar card number
 password            VARCHAR(255)    NO      -                   Hashed password
-role                ENUM            NO      'citizen'           User role
+role                ENUM            NO      'admin'             Admin role/level
+department          VARCHAR(100)    YES     NULL                Department name
+designation         VARCHAR(100)    YES     NULL                Job designation
+permissions         JSON            YES     NULL                Role-based permissions
 status              ENUM            NO      'active'            Account status
-email_verified      BOOLEAN         YES     FALSE               Email verification status
-phone_verified      BOOLEAN         YES     FALSE               Phone verification status
-email_notifications BOOLEAN         YES     TRUE                Email notification preference
-sms_notifications   BOOLEAN         YES     TRUE                SMS notification preference
+last_login          TIMESTAMP       YES     NULL                Last login timestamp
 created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Account creation timestamp
 updated_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Last update timestamp
 
 ENUM VALUES:
 ------------
-role: 'citizen', 'admin', 'officer'
+role: 'super_admin', 'admin', 'officer', 'reviewer'
 status: 'active', 'inactive', 'suspended'
+
+ROLE DESCRIPTIONS:
+------------------
+- super_admin: Full system access, can manage all admins
+- admin: General administrative access, can manage users and applications
+- officer: Limited access, can process applications
+- reviewer: Document review and verification access
 
 CONSTRAINTS:
 ------------
 - PRIMARY KEY: id
+- UNIQUE: admin_id
 - UNIQUE: email
 - UNIQUE: mobile
 
 INDEXES:
 --------
 - PRIMARY KEY (id)
+- UNIQUE INDEX (admin_id)
 - UNIQUE INDEX (email)
-- UNIQUE INDEX (mobile)
+- INDEX (role)
+- INDEX (status)
 
 SAMPLE DATA:
 ------------
-Admin User: admin@gov.in / password (hashed)
-Test User: test@example.com / password (hashed)
+ADM001: Super Admin (superadmin@gov.in)
+ADM002: Admin User (admin@gov.in)
+ADM003: Document Reviewer (reviewer@gov.in)
 
 
 ═══════════════════════════════════════════════════════════════════════════════
-                           2. SERVICES TABLE
+                           2. USERS TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: users
+Description: Stores citizen user accounts who access government services
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default                     Description
+---------------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT              Unique user identifier
+user_id             VARCHAR(20)     NO      -                           User code (e.g., USR001)
+name                VARCHAR(100)    NO      -                           Full name of user
+email               VARCHAR(100)    NO      -                           Email address (unique)
+mobile              VARCHAR(15)     NO      -                           Mobile number (unique)
+aadhaar_number      VARCHAR(12)     YES     NULL                        Aadhaar card number (unique)
+pan_number          VARCHAR(10)     YES     NULL                        PAN card number
+date_of_birth       DATE            YES     NULL                        Date of birth
+gender              ENUM            YES     NULL                        Gender
+address             TEXT            YES     NULL                        Full address
+city                VARCHAR(100)    YES     NULL                        City name
+state               VARCHAR(50)     YES     NULL                        State name
+pincode             VARCHAR(6)      YES     NULL                        Postal code
+password            VARCHAR(255)    NO      -                           Hashed password
+profile_photo       VARCHAR(255)    YES     NULL                        Profile photo path
+status              ENUM            NO      'pending_verification'      Account status
+email_verified      BOOLEAN         NO      FALSE                       Email verification status
+mobile_verified     BOOLEAN         NO      FALSE                       Mobile verification status
+email_notifications BOOLEAN         NO      TRUE                        Email notification preference
+sms_notifications   BOOLEAN         NO      TRUE                        SMS notification preference
+last_login          TIMESTAMP       YES     NULL                        Last login timestamp
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP           Account creation timestamp
+updated_at          TIMESTAMP       NO      CURRENT_TIMESTAMP           Last update timestamp
+
+ENUM VALUES:
+------------
+gender: 'male', 'female', 'other'
+status: 'active', 'inactive', 'suspended', 'pending_verification'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- UNIQUE: user_id
+- UNIQUE: email
+- UNIQUE: mobile
+- UNIQUE: aadhaar_number
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- UNIQUE INDEX (user_id)
+- UNIQUE INDEX (email)
+- INDEX (mobile)
+- INDEX (aadhaar_number)
+- INDEX (status)
+
+SAMPLE DATA:
+------------
+USR001: Test User (test@example.com) - Active, Verified
+USR002: John Doe (john@example.com) - Active, Email Verified
+USR003: Jane Smith (jane@example.com) - Pending Verification
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           3. SERVICES TABLE
 ═══════════════════════════════════════════════════════════════════════════════
 
 Table Name: services
@@ -368,7 +450,7 @@ file_size           INT             NO      -                   File size in byt
 file_type           VARCHAR(50)     NO      -                   MIME type
 status              ENUM            NO      'pending'           Review status
 admin_remarks       TEXT            YES     NULL                Admin review comments
-reviewed_by         INT             YES     NULL                Admin user ID who reviewed
+reviewed_by         INT             YES     NULL                Admin ID who reviewed
 reviewed_at         TIMESTAMP       YES     NULL                Review timestamp
 uploaded_at         TIMESTAMP       NO      CURRENT_TIMESTAMP   Upload timestamp
 
@@ -380,7 +462,7 @@ CONSTRAINTS:
 ------------
 - PRIMARY KEY: id
 - FOREIGN KEY: user_id REFERENCES users(id) ON DELETE CASCADE
-- FOREIGN KEY: reviewed_by REFERENCES users(id) ON DELETE SET NULL
+- FOREIGN KEY: reviewed_by REFERENCES admins(id) ON DELETE SET NULL
 
 INDEXES:
 --------
@@ -388,6 +470,7 @@ INDEXES:
 - INDEX (user_id)
 - INDEX (status)
 - INDEX (application_id)
+- INDEX (reviewed_by)
 - INDEX (uploaded_at)
 
 DOCUMENT TYPES:
@@ -414,11 +497,73 @@ ALLOWED FILE TYPES:
 
 
 ═══════════════════════════════════════════════════════════════════════════════
-                         8. STORED PROCEDURES
+                      8. ADMIN_ACTIVITY_LOG TABLE
 ═══════════════════════════════════════════════════════════════════════════════
 
-PROCEDURE: create_application
-------------------------------
+Table Name: admin_activity_log
+Description: Tracks all administrative actions for audit and security purposes
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique log identifier
+admin_id            INT             NO      -                   Reference to admins table
+action              VARCHAR(100)    NO      -                   Action performed
+target_type         VARCHAR(50)     YES     NULL                Type of target (user, application, etc.)
+target_id           INT             YES     NULL                ID of target record
+description         TEXT            YES     NULL                Detailed description
+ip_address          VARCHAR(45)     YES     NULL                IP address of admin
+user_agent          TEXT            YES     NULL                Browser/device information
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Action timestamp
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- FOREIGN KEY: admin_id REFERENCES admins(id) ON DELETE CASCADE
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- INDEX (admin_id)
+- INDEX (action)
+- INDEX (created_at)
+
+COMMON ACTIONS:
+---------------
+- user_created: New user account created
+- user_updated: User account modified
+- user_suspended: User account suspended
+- application_approved: Application approved
+- application_rejected: Application rejected
+- document_reviewed: Document reviewed
+- service_created: New service added
+- scheme_created: New scheme added
+- admin_login: Admin logged in
+- admin_logout: Admin logged out
+- settings_changed: System settings modified
+
+USAGE EXAMPLE:
+--------------
+When admin approves an application:
+- admin_id: 1
+- action: 'application_approved'
+- target_type: 'application'
+- target_id: 123
+- description: 'Application APP2026123456 approved'
+- ip_address: '192.168.1.1'
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         9. STORED PROCEDURES
+═══════════════════════════════════════════════════════════════════════════════
+
+PROCEDURE 1: create_application
+--------------------------------
 Description: Creates a new service application with auto-generated number
 Parameters:
   - IN p_user_id INT: User ID
@@ -430,12 +575,65 @@ Usage Example:
 CALL create_application(1, 5, '{"name":"John Doe","address":"123 Street"}');
 
 
+PROCEDURE 2: log_admin_activity
+--------------------------------
+Description: Logs administrative actions for audit trail
+Parameters:
+  - IN p_admin_id INT: Admin ID
+  - IN p_action VARCHAR(100): Action performed
+  - IN p_target_type VARCHAR(50): Type of target
+  - IN p_target_id INT: Target record ID
+  - IN p_description TEXT: Action description
+  - IN p_ip_address VARCHAR(45): Admin IP address
+Returns: None
+
+Usage Example:
+CALL log_admin_activity(1, 'application_approved', 'application', 123, 
+                        'Approved application APP2026123456', '192.168.1.1');
+
+
 ═══════════════════════════════════════════════════════════════════════════════
-                      9. INDEXES AND CONSTRAINTS
+                         10. DATABASE VIEWS
+═══════════════════════════════════════════════════════════════════════════════
+
+VIEW 1: admin_dashboard_stats
+------------------------------
+Description: Provides real-time statistics for admin dashboard
+Columns:
+  - active_users: Count of active users
+  - pending_applications: Count of pending applications
+  - pending_documents: Count of pending documents
+  - active_services: Count of active services
+  - active_schemes: Count of active schemes
+
+Usage Example:
+SELECT * FROM admin_dashboard_stats;
+
+
+VIEW 2: user_application_summary
+---------------------------------
+Description: Summarizes application statistics for each user
+Columns:
+  - user_id: User ID
+  - user_code: User code (USR001, etc.)
+  - user_name: User full name
+  - email: User email
+  - total_applications: Total applications submitted
+  - pending_count: Pending applications
+  - approved_count: Approved applications
+  - rejected_count: Rejected applications
+
+Usage Example:
+SELECT * FROM user_application_summary WHERE user_id = 1;
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      11. INDEXES AND CONSTRAINTS
 ═══════════════════════════════════════════════════════════════════════════════
 
 PRIMARY KEYS:
 -------------
+- admins.id
 - users.id
 - services.id
 - service_applications.id
@@ -443,12 +641,14 @@ PRIMARY KEYS:
 - user_saved_schemes.id
 - notifications.id
 - document_uploads.id
+- admin_activity_log.id
 
 FOREIGN KEYS:
 -------------
 service_applications:
   - user_id → users(id) ON DELETE CASCADE
   - service_id → services(id) ON DELETE CASCADE
+  - assigned_to → admins(id) ON DELETE SET NULL
 
 user_saved_schemes:
   - user_id → users(id) ON DELETE CASCADE
@@ -456,34 +656,81 @@ user_saved_schemes:
 
 notifications:
   - user_id → users(id) ON DELETE CASCADE
+  - admin_id → admins(id) ON DELETE CASCADE
 
 document_uploads:
   - user_id → users(id) ON DELETE CASCADE
-  - reviewed_by → users(id) ON DELETE SET NULL
+  - reviewed_by → admins(id) ON DELETE SET NULL
+
+admin_activity_log:
+  - admin_id → admins(id) ON DELETE CASCADE
+
+services:
+  - created_by → admins(id) ON DELETE SET NULL
+
+schemes:
+  - created_by → admins(id) ON DELETE SET NULL
 
 UNIQUE CONSTRAINTS:
 -------------------
+- admins.admin_id
+- admins.email
+- admins.mobile
+- users.user_id
 - users.email
 - users.mobile
+- users.aadhaar_number
+- services.service_code
 - service_applications.application_number
+- schemes.scheme_code
 - user_saved_schemes (user_id, scheme_id)
 
 INDEXES FOR PERFORMANCE:
 ------------------------
-- users: email, mobile
-- services: category, status
-- service_applications: user_id, service_id, status, application_number
-- schemes: category, state, status
-- notifications: user_id, type, status, created_at
-- document_uploads: user_id, status, application_id, uploaded_at
+admins:
+  - admin_id, email, mobile, role, status
+
+users:
+  - user_id, email, mobile, aadhaar_number, status
+
+services:
+  - service_code, category, status
+
+service_applications:
+  - user_id, service_id, application_number, status, assigned_to
+
+schemes:
+  - scheme_code, category, state, status
+
+notifications:
+  - user_id, admin_id, recipient_type, type, status
+
+document_uploads:
+  - user_id, status, application_id, reviewed_by
+
+admin_activity_log:
+  - admin_id, action, created_at
 
 
 ═══════════════════════════════════════════════════════════════════════════════
-                      10. DATABASE RELATIONSHIPS
+                      12. DATABASE RELATIONSHIPS
 ═══════════════════════════════════════════════════════════════════════════════
 
 RELATIONSHIP DIAGRAM:
 ---------------------
+
+admins (1) ──────< (M) service_applications (assigned_to)
+  │
+  ├──────< (M) document_uploads (reviewed_by)
+  │
+  ├──────< (M) admin_activity_log
+  │
+  ├──────< (M) notifications
+  │
+  ├──────< (M) services (created_by)
+  │
+  └──────< (M) schemes (created_by)
+
 
 users (1) ──────< (M) service_applications
   │                      │
@@ -496,8 +743,6 @@ users (1) ──────< (M) service_applications
   ├──────< (M) notifications
   │
   └──────< (M) document_uploads
-           │
-           └──> reviewed_by (users.id)
 
 LEGEND:
 -------
@@ -509,54 +754,114 @@ LEGEND:
 RELATIONSHIP DESCRIPTIONS:
 --------------------------
 
-1. users → service_applications (One-to-Many)
+ADMIN RELATIONSHIPS:
+
+1. admins → service_applications.assigned_to (One-to-Many)
+   - One admin can be assigned multiple applications
+   - SET NULL: Deleting admin sets assigned_to to NULL
+
+2. admins → document_uploads.reviewed_by (One-to-Many)
+   - One admin can review multiple documents
+   - SET NULL: Deleting admin sets reviewed_by to NULL
+
+3. admins → admin_activity_log (One-to-Many)
+   - One admin can have multiple activity logs
+   - CASCADE DELETE: Deleting admin removes all activity logs
+
+4. admins → notifications (One-to-Many)
+   - One admin can receive multiple notifications
+   - CASCADE DELETE: Deleting admin removes all notifications
+
+5. admins → services.created_by (One-to-Many)
+   - One admin can create multiple services
+   - SET NULL: Deleting admin sets created_by to NULL
+
+6. admins → schemes.created_by (One-to-Many)
+   - One admin can create multiple schemes
+   - SET NULL: Deleting admin sets created_by to NULL
+
+
+USER RELATIONSHIPS:
+
+7. users → service_applications (One-to-Many)
    - One user can have multiple service applications
    - CASCADE DELETE: Deleting user removes all their applications
 
-2. services → service_applications (One-to-Many)
+8. services → service_applications (One-to-Many)
    - One service can have multiple applications
    - CASCADE DELETE: Deleting service removes all related applications
 
-3. users → user_saved_schemes (One-to-Many)
+9. users → user_saved_schemes (One-to-Many)
    - One user can save multiple schemes
    - CASCADE DELETE: Deleting user removes all saved schemes
 
-4. schemes → user_saved_schemes (One-to-Many)
-   - One scheme can be saved by multiple users
-   - CASCADE DELETE: Deleting scheme removes all bookmarks
+10. schemes → user_saved_schemes (One-to-Many)
+    - One scheme can be saved by multiple users
+    - CASCADE DELETE: Deleting scheme removes all bookmarks
 
-5. users → notifications (One-to-Many)
-   - One user can have multiple notifications
-   - CASCADE DELETE: Deleting user removes all notifications
+11. users → notifications (One-to-Many)
+    - One user can have multiple notifications
+    - CASCADE DELETE: Deleting user removes all notifications
 
-6. users → document_uploads (One-to-Many)
-   - One user can upload multiple documents
-   - CASCADE DELETE: Deleting user removes all uploaded documents
-
-7. users → document_uploads.reviewed_by (One-to-Many)
-   - One admin can review multiple documents
-   - SET NULL: Deleting admin sets reviewed_by to NULL
+12. users → document_uploads (One-to-Many)
+    - One user can upload multiple documents
+    - CASCADE DELETE: Deleting user removes all uploaded documents
 
 
 ═══════════════════════════════════════════════════════════════════════════════
                          DATABASE STATISTICS
 ═══════════════════════════════════════════════════════════════════════════════
 
-Total Tables: 7
-Total Stored Procedures: 1
-Total Foreign Keys: 7
-Total Indexes: 20+
-Total Sample Records: 30+
+Total Tables: 9
+  - 2 User Management Tables (admins, users)
+  - 2 Service Tables (services, service_applications)
+  - 2 Scheme Tables (schemes, user_saved_schemes)
+  - 3 Support Tables (notifications, document_uploads, admin_activity_log)
+
+Total Stored Procedures: 2
+Total Database Views: 2
+Total Foreign Keys: 11
+Total Indexes: 30+
+Total Sample Records: 40+
 
 ESTIMATED STORAGE:
 ------------------
-- users: ~1 KB per record
+- admins: ~1 KB per record
+- users: ~2 KB per record
 - services: ~2 KB per record
 - service_applications: ~3 KB per record (with JSON data)
 - schemes: ~2 KB per record
 - user_saved_schemes: ~0.1 KB per record
 - notifications: ~1 KB per record
-- document_uploads: ~1 KB per record (metadata only, files stored separately)
+- document_uploads: ~1 KB per record (metadata only)
+- admin_activity_log: ~0.5 KB per record
+
+
+KEY DIFFERENCES: ADMINS vs USERS
+---------------------------------
+
+ADMINS TABLE:
+- Administrative personnel only
+- Has admin_id (ADM001, ADM002, etc.)
+- Includes role hierarchy (super_admin, admin, officer, reviewer)
+- Has department and designation fields
+- Includes permissions (JSON)
+- Tracks last_login for security
+- Can create services and schemes
+- Can review documents and applications
+- Activity is logged in admin_activity_log
+
+USERS TABLE:
+- Citizen users only
+- Has user_id (USR001, USR002, etc.)
+- Includes personal details (Aadhaar, PAN, DOB, gender)
+- Has full address information
+- Includes profile_photo
+- Has verification status (email_verified, mobile_verified)
+- Can apply for services
+- Can save schemes
+- Can upload documents
+- Receives notifications
 
 
 ═══════════════════════════════════════════════════════════════════════════════
