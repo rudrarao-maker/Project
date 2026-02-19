@@ -1,0 +1,625 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    GOV E-SERVICES PORTAL - DATA DICTIONARY
+═══════════════════════════════════════════════════════════════════════════════
+
+Project Name: Government E-Services Portal
+Database Name: gov_eservices_database
+Database Type: MySQL
+Version: 1.0
+Last Updated: February 19, 2026
+
+═══════════════════════════════════════════════════════════════════════════════
+                              TABLE OF CONTENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. USERS TABLE
+2. SERVICES TABLE
+3. SERVICE_APPLICATIONS TABLE
+4. SCHEMES TABLE
+5. USER_SAVED_SCHEMES TABLE
+6. NOTIFICATIONS TABLE
+7. DOCUMENT_UPLOADS TABLE
+8. STORED PROCEDURES
+9. INDEXES AND CONSTRAINTS
+10. RELATIONSHIPS DIAGRAM
+
+═══════════════════════════════════════════════════════════════════════════════
+                           1. USERS TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: users
+Description: Stores user account information for citizens, officers, and admins
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique user identifier
+name                VARCHAR(100)    NO      -                   Full name of user
+email               VARCHAR(100)    NO      -                   Email address (unique)
+mobile              VARCHAR(15)     NO      -                   Mobile number (unique)
+aadhaar_number      VARCHAR(12)     YES     NULL                Aadhaar card number
+password            VARCHAR(255)    NO      -                   Hashed password
+role                ENUM            NO      'citizen'           User role
+status              ENUM            NO      'active'            Account status
+email_verified      BOOLEAN         YES     FALSE               Email verification status
+phone_verified      BOOLEAN         YES     FALSE               Phone verification status
+email_notifications BOOLEAN         YES     TRUE                Email notification preference
+sms_notifications   BOOLEAN         YES     TRUE                SMS notification preference
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Account creation timestamp
+updated_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Last update timestamp
+
+ENUM VALUES:
+------------
+role: 'citizen', 'admin', 'officer'
+status: 'active', 'inactive', 'suspended'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- UNIQUE: email
+- UNIQUE: mobile
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- UNIQUE INDEX (email)
+- UNIQUE INDEX (mobile)
+
+SAMPLE DATA:
+------------
+Admin User: admin@gov.in / password (hashed)
+Test User: test@example.com / password (hashed)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           2. SERVICES TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: services
+Description: Stores information about government services available to citizens
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique service identifier
+name                VARCHAR(200)    NO      -                   Service name
+description         TEXT            YES     NULL                Detailed description
+category            VARCHAR(50)     YES     NULL                Service category
+department          VARCHAR(100)    YES     NULL                Responsible department
+required_documents  TEXT            YES     NULL                List of required documents
+processing_time     VARCHAR(50)     YES     NULL                Expected processing time
+fees                DECIMAL(10,2)   YES     0.00                Service fees in rupees
+status              ENUM            NO      'active'            Service availability status
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Service creation timestamp
+
+ENUM VALUES:
+------------
+status: 'active', 'inactive'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- INDEX (category)
+- INDEX (status)
+
+SAMPLE SERVICES:
+----------------
+- Aadhaar Card (Identity, UIDAI, Free)
+- PAN Card (Identity, Income Tax, ₹110)
+- Passport (Identity, MEA, ₹1500)
+- Driving License (Transport, RTO, ₹200)
+- Birth Certificate (Certificate, Municipal, ₹50)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      3. SERVICE_APPLICATIONS TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: service_applications
+Description: Tracks user applications for various government services
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique application identifier
+user_id             INT             NO      -                   Reference to users table
+service_id          INT             NO      -                   Reference to services table
+application_number  VARCHAR(50)     NO      -                   Unique application number
+status              ENUM            NO      'pending'           Application status
+submitted_data      JSON            YES     NULL                Application form data (JSON)
+remarks             TEXT            YES     NULL                Admin/officer remarks
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Application submission time
+updated_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Last status update time
+
+ENUM VALUES:
+------------
+status: 'pending', 'in_progress', 'approved', 'rejected'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- UNIQUE: application_number
+- FOREIGN KEY: user_id REFERENCES users(id) ON DELETE CASCADE
+- FOREIGN KEY: service_id REFERENCES services(id) ON DELETE CASCADE
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- UNIQUE INDEX (application_number)
+- INDEX (user_id)
+- INDEX (service_id)
+- INDEX (status)
+- INDEX (created_at)
+
+APPLICATION NUMBER FORMAT:
+--------------------------
+Format: APP{YEAR}{6-digit-random}
+Example: APP2026123456
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                           4. SCHEMES TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: schemes
+Description: Stores government schemes and welfare programs
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique scheme identifier
+name                VARCHAR(200)    NO      -                   Scheme name
+description         TEXT            YES     NULL                Detailed description
+category            VARCHAR(50)     YES     NULL                Scheme category
+eligibility         TEXT            YES     NULL                Eligibility criteria
+benefits            TEXT            YES     NULL                Benefits provided
+state               VARCHAR(50)     YES     NULL                State/Central scheme
+department          VARCHAR(100)    YES     NULL                Responsible department
+status              ENUM            NO      'active'            Scheme availability
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Scheme creation timestamp
+
+ENUM VALUES:
+------------
+status: 'active', 'inactive'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- INDEX (category)
+- INDEX (state)
+- INDEX (status)
+
+SCHEME CATEGORIES:
+------------------
+- Agriculture
+- Health
+- Housing
+- Social Welfare
+- Pension
+- Finance
+- Education
+- Food Security
+- Skill Development
+
+SAMPLE SCHEMES:
+---------------
+Central:
+- PM-KISAN (Agriculture, ₹6000/year)
+- Ayushman Bharat (Health, ₹5 lakh cover)
+- PM Awas Yojana (Housing, Subsidy)
+
+State-Specific:
+- Maharashtra: Mahatma Jyotiba Phule Jan Arogya Yojana
+- Karnataka: Krishi Bhagya Scheme
+- Tamil Nadu: Amma Unavagam
+- Gujarat: Vahli Dikri Yojana
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      5. USER_SAVED_SCHEMES TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: user_saved_schemes
+Description: Junction table for users saving/bookmarking schemes
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique record identifier
+user_id             INT             NO      -                   Reference to users table
+scheme_id           INT             NO      -                   Reference to schemes table
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Bookmark creation time
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- FOREIGN KEY: user_id REFERENCES users(id) ON DELETE CASCADE
+- FOREIGN KEY: scheme_id REFERENCES schemes(id) ON DELETE CASCADE
+- UNIQUE KEY: unique_user_scheme (user_id, scheme_id)
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- UNIQUE INDEX (user_id, scheme_id)
+- INDEX (user_id)
+- INDEX (scheme_id)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         6. NOTIFICATIONS TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: notifications
+Description: Stores user notifications and tracks email/SMS delivery
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique notification identifier
+user_id             INT             NO      -                   Reference to users table
+type                ENUM            NO      -                   Notification type
+recipient           VARCHAR(255)    NO      -                   Email address or phone number
+subject             VARCHAR(255)    YES     NULL                Email subject (for emails)
+message             TEXT            NO      -                   Notification message content
+status              ENUM            NO      'pending'           Delivery status
+error_message       TEXT            YES     NULL                Error details if failed
+title               VARCHAR(200)    YES     NULL                Notification title
+is_read             BOOLEAN         NO      FALSE               Read status (in-app)
+created_at          TIMESTAMP       NO      CURRENT_TIMESTAMP   Notification creation time
+sent_at             TIMESTAMP       YES     NULL                Delivery timestamp
+
+ENUM VALUES:
+------------
+type: 'email', 'sms'
+status: 'pending', 'sent', 'failed'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- FOREIGN KEY: user_id REFERENCES users(id) ON DELETE CASCADE
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- INDEX (user_id)
+- INDEX (type)
+- INDEX (status)
+- INDEX (created_at)
+
+NOTIFICATION TYPES:
+-------------------
+Email Templates:
+- registration: Welcome email
+- application_submitted: Application confirmation
+- status_approved: Application approved
+- status_rejected: Application rejected
+- status_review: Under review notification
+- appointment: Appointment reminder
+
+SMS Templates:
+- registration: Welcome SMS
+- application_submitted: Application confirmation
+- status_update: Status change notification
+- otp: One-time password
+- appointment: Appointment reminder
+- payment: Payment confirmation
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                       7. DOCUMENT_UPLOADS TABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+Table Name: document_uploads
+Description: Stores uploaded documents for verification and admin review
+Primary Key: id
+Engine: InnoDB
+Charset: utf8mb4
+
+COLUMNS:
+--------
+
+Column Name         Data Type       Null    Default             Description
+-------------------------------------------------------------------------------
+id                  INT             NO      AUTO_INCREMENT      Unique document identifier
+user_id             INT             NO      -                   Reference to users table
+application_id      VARCHAR(50)     YES     NULL                Related application number
+document_type       VARCHAR(100)    NO      -                   Type of document
+document_name       VARCHAR(255)    NO      -                   Original filename
+file_path           VARCHAR(500)    NO      -                   Server file path
+file_size           INT             NO      -                   File size in bytes
+file_type           VARCHAR(50)     NO      -                   MIME type
+status              ENUM            NO      'pending'           Review status
+admin_remarks       TEXT            YES     NULL                Admin review comments
+reviewed_by         INT             YES     NULL                Admin user ID who reviewed
+reviewed_at         TIMESTAMP       YES     NULL                Review timestamp
+uploaded_at         TIMESTAMP       NO      CURRENT_TIMESTAMP   Upload timestamp
+
+ENUM VALUES:
+------------
+status: 'pending', 'approved', 'rejected'
+
+CONSTRAINTS:
+------------
+- PRIMARY KEY: id
+- FOREIGN KEY: user_id REFERENCES users(id) ON DELETE CASCADE
+- FOREIGN KEY: reviewed_by REFERENCES users(id) ON DELETE SET NULL
+
+INDEXES:
+--------
+- PRIMARY KEY (id)
+- INDEX (user_id)
+- INDEX (status)
+- INDEX (application_id)
+- INDEX (uploaded_at)
+
+DOCUMENT TYPES:
+---------------
+- Aadhaar Card
+- PAN Card
+- Voter ID Card
+- Passport
+- Driving License
+- Birth Certificate
+- Income Certificate
+- Caste Certificate
+- Domicile Certificate
+- Bank Statement
+- Salary Slip
+- Property Documents
+- Other Documents
+
+ALLOWED FILE TYPES:
+-------------------
+- Images: JPG, JPEG, PNG
+- Documents: PDF
+- Maximum Size: 5 MB
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         8. STORED PROCEDURES
+═══════════════════════════════════════════════════════════════════════════════
+
+PROCEDURE: create_application
+------------------------------
+Description: Creates a new service application with auto-generated number
+Parameters:
+  - IN p_user_id INT: User ID
+  - IN p_service_id INT: Service ID
+  - IN p_data JSON: Application form data
+Returns: application_number (VARCHAR)
+
+Usage Example:
+CALL create_application(1, 5, '{"name":"John Doe","address":"123 Street"}');
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      9. INDEXES AND CONSTRAINTS
+═══════════════════════════════════════════════════════════════════════════════
+
+PRIMARY KEYS:
+-------------
+- users.id
+- services.id
+- service_applications.id
+- schemes.id
+- user_saved_schemes.id
+- notifications.id
+- document_uploads.id
+
+FOREIGN KEYS:
+-------------
+service_applications:
+  - user_id → users(id) ON DELETE CASCADE
+  - service_id → services(id) ON DELETE CASCADE
+
+user_saved_schemes:
+  - user_id → users(id) ON DELETE CASCADE
+  - scheme_id → schemes(id) ON DELETE CASCADE
+
+notifications:
+  - user_id → users(id) ON DELETE CASCADE
+
+document_uploads:
+  - user_id → users(id) ON DELETE CASCADE
+  - reviewed_by → users(id) ON DELETE SET NULL
+
+UNIQUE CONSTRAINTS:
+-------------------
+- users.email
+- users.mobile
+- service_applications.application_number
+- user_saved_schemes (user_id, scheme_id)
+
+INDEXES FOR PERFORMANCE:
+------------------------
+- users: email, mobile
+- services: category, status
+- service_applications: user_id, service_id, status, application_number
+- schemes: category, state, status
+- notifications: user_id, type, status, created_at
+- document_uploads: user_id, status, application_id, uploaded_at
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                      10. DATABASE RELATIONSHIPS
+═══════════════════════════════════════════════════════════════════════════════
+
+RELATIONSHIP DIAGRAM:
+---------------------
+
+users (1) ──────< (M) service_applications
+  │                      │
+  │                      └──> (M) services (1)
+  │
+  ├──────< (M) user_saved_schemes
+  │                      │
+  │                      └──> (M) schemes (1)
+  │
+  ├──────< (M) notifications
+  │
+  └──────< (M) document_uploads
+           │
+           └──> reviewed_by (users.id)
+
+LEGEND:
+-------
+(1) = One
+(M) = Many
+──> = Foreign Key Reference
+
+
+RELATIONSHIP DESCRIPTIONS:
+--------------------------
+
+1. users → service_applications (One-to-Many)
+   - One user can have multiple service applications
+   - CASCADE DELETE: Deleting user removes all their applications
+
+2. services → service_applications (One-to-Many)
+   - One service can have multiple applications
+   - CASCADE DELETE: Deleting service removes all related applications
+
+3. users → user_saved_schemes (One-to-Many)
+   - One user can save multiple schemes
+   - CASCADE DELETE: Deleting user removes all saved schemes
+
+4. schemes → user_saved_schemes (One-to-Many)
+   - One scheme can be saved by multiple users
+   - CASCADE DELETE: Deleting scheme removes all bookmarks
+
+5. users → notifications (One-to-Many)
+   - One user can have multiple notifications
+   - CASCADE DELETE: Deleting user removes all notifications
+
+6. users → document_uploads (One-to-Many)
+   - One user can upload multiple documents
+   - CASCADE DELETE: Deleting user removes all uploaded documents
+
+7. users → document_uploads.reviewed_by (One-to-Many)
+   - One admin can review multiple documents
+   - SET NULL: Deleting admin sets reviewed_by to NULL
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         DATABASE STATISTICS
+═══════════════════════════════════════════════════════════════════════════════
+
+Total Tables: 7
+Total Stored Procedures: 1
+Total Foreign Keys: 7
+Total Indexes: 20+
+Total Sample Records: 30+
+
+ESTIMATED STORAGE:
+------------------
+- users: ~1 KB per record
+- services: ~2 KB per record
+- service_applications: ~3 KB per record (with JSON data)
+- schemes: ~2 KB per record
+- user_saved_schemes: ~0.1 KB per record
+- notifications: ~1 KB per record
+- document_uploads: ~1 KB per record (metadata only, files stored separately)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         SECURITY CONSIDERATIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. PASSWORD STORAGE:
+   - Passwords are hashed using bcrypt (PHP password_hash)
+   - Never store plain text passwords
+
+2. CASCADE DELETES:
+   - User deletion removes all related data automatically
+   - Prevents orphaned records
+
+3. FOREIGN KEY CONSTRAINTS:
+   - Ensures referential integrity
+   - Prevents invalid references
+
+4. ENUM VALIDATION:
+   - Restricts values to predefined options
+   - Prevents invalid status values
+
+5. UNIQUE CONSTRAINTS:
+   - Prevents duplicate emails and mobile numbers
+   - Ensures unique application numbers
+
+6. INDEXES:
+   - Improves query performance
+   - Optimizes searches and joins
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                         BACKUP AND MAINTENANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+RECOMMENDED BACKUP SCHEDULE:
+----------------------------
+- Daily: Incremental backup
+- Weekly: Full database backup
+- Monthly: Archive backup
+
+MAINTENANCE TASKS:
+------------------
+- Optimize tables monthly
+- Check and repair tables quarterly
+- Update statistics regularly
+- Monitor index usage
+- Archive old notifications (>6 months)
+- Clean up rejected documents (>1 year)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              VERSION HISTORY
+═══════════════════════════════════════════════════════════════════════════════
+
+Version 1.0 - February 19, 2026
+- Initial database schema
+- 7 core tables created
+- Sample data inserted
+- Stored procedures added
+- Indexes optimized
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                                 END OF DOCUMENT
+═══════════════════════════════════════════════════════════════════════════════
