@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const taskController = require("../controllers/taskController");
-const { protect } = require("../middleware/auth");
-const { authorizeRoles } = require("../middleware/auth");
+const { authenticate, authorizeRoles } = require("../middleware/auth");
 
 // All routes require authentication
-router.use(protect);
+router.use(authenticate);
 
 // Users and Admins can get tasks and update tasks
 router.get("/", taskController.getTasks);
