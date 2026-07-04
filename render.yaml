@@ -32,7 +32,6 @@ services:
     name: gov-eservices-portal
     env: static
     plan: free
-    region: singapore
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
     envVars:
