@@ -1,12 +1,12 @@
-services:
+databases:
   # 1. PostgreSQL Database
-  - type: psql
-    name: gov-eservices-db
+  - name: gov-eservices-db
     databaseName: gov_eservices
     user: admin
     region: singapore # Change as needed based on your users
     plan: free
 
+services:
   # 2. Node.js Backend API
   - type: web
     name: gov-eservices-api
