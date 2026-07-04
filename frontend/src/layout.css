@@ -47,7 +47,9 @@
   height: 100%;
   padding: 0 24px;
 }
-.navbar-left, .navbar-center, .navbar-right {
+.navbar-left,
+.navbar-center,
+.navbar-right {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -217,7 +219,8 @@
   color: var(--text-secondary);
   outline: none;
 }
-.dropdown-item:hover, .dropdown-item[data-highlighted] {
+.dropdown-item:hover,
+.dropdown-item[data-highlighted] {
   background: var(--bg-secondary);
   color: var(--text-primary);
 }
@@ -243,7 +246,7 @@
 .sidebar-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 30;
   backdrop-filter: blur(2px);
 }

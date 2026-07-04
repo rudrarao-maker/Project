@@ -1,6 +1,6 @@
-const multer = require('multer');
-const path = require('path');
-const config = require('../config');
+const multer = require("multer");
+const path = require("path");
+const config = require("../config");
 
 // Storage configuration
 const storage = multer.diskStorage({
@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     cb(null, config.upload.uploadDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, `${uniqueSuffix}${ext}`);
   },
@@ -19,7 +19,7 @@ const fileFilter = (req, file, cb) => {
   if (config.upload.allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Only JPG, PNG, and PDF files are allowed.'), false);
+    cb(new Error("Only JPG, PNG, and PDF files are allowed."), false);
   }
 };
 

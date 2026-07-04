@@ -118,7 +118,7 @@
 .filter-pill.active-filter {
   border-color: var(--gov-saffron);
   color: var(--gov-saffron);
-  background-color: #FFF7ED;
+  background-color: #fff7ed;
 }
 
 /* Jobs Count */
@@ -238,7 +238,7 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,7 +279,12 @@
 .job-skeleton-line {
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    rgba(0, 0, 0, 0.04) 50%,
+    var(--border-color) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   margin-bottom: 10px;
@@ -289,15 +294,24 @@
   width: 48px;
   height: 48px;
   border-radius: 10px;
-  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    rgba(0, 0, 0, 0.04) 50%,
+    var(--border-color) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   flex-shrink: 0;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* ============================================================================

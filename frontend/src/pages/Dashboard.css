@@ -6,7 +6,7 @@
   min-height: 100vh;
   padding: 32px;
   background: var(--bg-body);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   color: var(--text-primary);
 }
 
@@ -26,7 +26,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-[data-theme='dark'] .dashboard-title {
+[data-theme="dark"] .dashboard-title {
   background: linear-gradient(135deg, #60a5fa, #bfdbfe);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -54,7 +54,9 @@
   gap: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(128, 128, 128, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -74,10 +76,22 @@
   flex-shrink: 0;
 }
 
-.stat-icon-wrapper.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.stat-icon-wrapper.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.stat-icon-wrapper.orange { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.stat-icon-wrapper.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+.stat-icon-wrapper.blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+.stat-icon-wrapper.green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+.stat-icon-wrapper.orange {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+.stat-icon-wrapper.purple {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
 
 .stat-content {
   flex: 1;
@@ -192,9 +206,18 @@
   gap: 6px;
 }
 
-.status-badge.approved { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.status-badge.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.status-badge.rejected { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.status-badge.approved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+.status-badge.rejected {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
 
 /* Notifications List */
 .notification-list {

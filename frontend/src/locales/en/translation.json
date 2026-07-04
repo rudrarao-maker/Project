@@ -3,7 +3,7 @@
     "home": "Home",
     "services": "Services",
     "schemes": "Schemes",
-    "jobs": "Gov Jobs",
+    "jobs": "Jobs",
     "track": "Track App",
     "contact": "Contact"
   },
@@ -15,5 +15,23 @@
   },
   "search": {
     "placeholder": "Search services, schemes (Ctrl+K)..."
+  },
+  "home": {
+    "categories": "Browse by Category",
+    "viewAll": "View All",
+    "schemes": "Government Schemes",
+    "schemesSub": "Find government schemes you are eligible for.",
+    "news": "Latest News",
+    "newsSub": "Stay updated with government announcements.",
+    "searchPlaceholder": "Search services, schemes...",
+    "searchBtn": "Search"
+  },
+  "categories": {
+    "education": "Education",
+    "finance": "Finance",
+    "health": "Health",
+    "transport": "Transport",
+    "agriculture": "Agriculture",
+    "employment": "Employment"
   }
 }

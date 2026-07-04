@@ -1,43 +1,84 @@
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
-import { 
-  Home, FileText, Briefcase, Settings, Users, 
-  BarChart2, File, Calendar, CheckSquare, X,
-  Activity, AlertTriangle, List, Shield, Bell, MessageSquare
-} from 'lucide-react';
-import clsx from 'clsx';
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import {
+  Home,
+  FileText,
+  Briefcase,
+  Settings,
+  Users,
+  BarChart2,
+  File,
+  Calendar,
+  CheckSquare,
+  X,
+  Activity,
+  AlertTriangle,
+  List,
+  Shield,
+  Bell,
+  MessageSquare,
+} from "lucide-react";
+import clsx from "clsx";
 
 const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
   const { isAdmin } = useAuth();
   const location = useLocation();
 
   const userLinks = [
-    { name: 'Dashboard', path: '/dashboard', icon: <Home size={20} /> },
-    { name: 'My Applications', path: '/applications', icon: <FileText size={20} /> },
-    { name: 'Digital Locker', path: '/locker', icon: <Shield size={20} /> },
-    { name: 'Wallet', path: '/wallet', icon: <BarChart2 size={20} /> },
-    { name: 'Grievances', path: '/grievances', icon: <AlertTriangle size={20} /> },
-    { name: 'Appointments', path: '/appointments', icon: <Calendar size={20} /> },
-    { name: 'Activity', path: '/activity', icon: <Activity size={20} /> },
-    { name: 'Notifications', path: '/notifications', icon: <Bell size={20} /> },
+    { name: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
+    {
+      name: "My Applications",
+      path: "/applications",
+      icon: <FileText size={20} />,
+    },
+    { name: "Digital Locker", path: "/locker", icon: <Shield size={20} /> },
+    { name: "Wallet", path: "/wallet", icon: <BarChart2 size={20} /> },
+    {
+      name: "Grievances",
+      path: "/grievances",
+      icon: <AlertTriangle size={20} />,
+    },
+    {
+      name: "Appointments",
+      path: "/appointments",
+      icon: <Calendar size={20} />,
+    },
+    { name: "Activity", path: "/activity", icon: <Activity size={20} /> },
+    { name: "Notifications", path: "/notifications", icon: <Bell size={20} /> },
   ];
 
   const adminLinks = [
-    { name: 'Overview', path: '/admin', icon: <BarChart2 size={20} /> },
-    { name: 'Applications', path: '/admin/applications', icon: <FileText size={20} /> },
-    { name: 'Users', path: '/admin/users', icon: <Users size={20} /> },
-    { name: 'Services', path: '/admin/services', icon: <Briefcase size={20} /> },
-    { name: 'Schemes', path: '/admin/schemes', icon: <List size={20} /> },
-    { name: 'Jobs', path: '/admin/jobs', icon: <Briefcase size={20} /> },
-    { name: 'Grievances', path: '/admin/grievances', icon: <AlertTriangle size={20} /> },
-    { name: 'Roles', path: '/admin/roles', icon: <Shield size={20} /> },
-    { name: 'Live Chat', path: '/admin/chat', icon: <MessageSquare size={20} /> },
+    { name: "Overview", path: "/admin", icon: <BarChart2 size={20} /> },
+    {
+      name: "Applications",
+      path: "/admin/applications",
+      icon: <FileText size={20} />,
+    },
+    { name: "Users", path: "/admin/users", icon: <Users size={20} /> },
+    {
+      name: "Services",
+      path: "/admin/services",
+      icon: <Briefcase size={20} />,
+    },
+    { name: "Schemes", path: "/admin/schemes", icon: <List size={20} /> },
+    { name: "Jobs", path: "/admin/jobs", icon: <Briefcase size={20} /> },
+    {
+      name: "Grievances",
+      path: "/admin/grievances",
+      icon: <AlertTriangle size={20} />,
+    },
+    { name: "Roles", path: "/admin/roles", icon: <Shield size={20} /> },
+    {
+      name: "Live Chat",
+      path: "/admin/chat",
+      icon: <MessageSquare size={20} />,
+    },
   ];
 
   const appLinks = [
-    { name: 'File Manager', path: '/files', icon: <File size={20} /> },
-    { name: 'Tasks', path: '/tasks', icon: <CheckSquare size={20} /> },
+    { name: "File Manager", path: "/files", icon: <File size={20} /> },
+    { name: "Tasks", path: "/tasks", icon: <CheckSquare size={20} /> },
   ];
 
   const links = isAdmin ? adminLinks : userLinks;
@@ -62,7 +103,7 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={clsx('sidebar-link', active && 'active')}
+                className={clsx("sidebar-link", active && "active")}
                 onClick={isMobile ? toggleSidebar : undefined}
               >
                 <span className="sidebar-icon">{link.icon}</span>
@@ -72,7 +113,7 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
                     layoutId="active-indicator"
                     className="active-indicator"
                     initial={false}
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
               </Link>
@@ -88,7 +129,10 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
             <Link
               key={link.path}
               to={link.path}
-              className={clsx('sidebar-link', location.pathname === link.path && 'active')}
+              className={clsx(
+                "sidebar-link",
+                location.pathname === link.path && "active",
+              )}
               onClick={isMobile ? toggleSidebar : undefined}
             >
               <span className="sidebar-icon">{link.icon}</span>
@@ -97,10 +141,12 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
           ))}
         </nav>
       </div>
-      
+
       <div className="sidebar-footer">
         <Link to="/settings" className="sidebar-link">
-          <span className="sidebar-icon"><Settings size={20} /></span>
+          <span className="sidebar-icon">
+            <Settings size={20} />
+          </span>
           <span className="sidebar-text">Settings</span>
         </Link>
       </div>
@@ -111,10 +157,13 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
     <>
       {/* Desktop Sidebar */}
       <motion.aside
-        className={clsx('professional-sidebar d-none d-md-flex', !isOpen && 'collapsed')}
+        className={clsx(
+          "professional-sidebar d-none d-md-flex",
+          !isOpen && "collapsed",
+        )}
         initial={false}
         animate={{ width: isOpen ? 260 : 72 }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <SidebarContent />
       </motion.aside>
@@ -132,10 +181,10 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
             />
             <motion.aside
               className="professional-sidebar mobile d-md-none"
-              initial={{ x: '-100%' }}
+              initial={{ x: "-100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
               <SidebarContent />
             </motion.aside>

@@ -1,7 +1,7 @@
-const app = require('./app');
-const config = require('./config');
-const http = require('http');
-const { initSocket } = require('./chatSocket');
+const app = require("./app");
+const config = require("./config");
+const http = require("http");
+const { initSocket } = require("./chatSocket");
 
 const PORT = config.port;
 

@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const getSession = async (userId) => {
@@ -13,7 +13,7 @@ const getSession = async (userId) => {
         sessionId: `CHAT${Date.now()}`,
         userId,
         isActive: true,
-      }
+      },
     });
   }
 
@@ -25,10 +25,10 @@ const saveMessage = async (sessionId, senderType, senderId, content) => {
     data: {
       sessionId,
       senderType, // 'user' or 'admin'
-      senderUserId: senderType === 'user' ? senderId : null,
-      senderAdminId: senderType === 'admin' ? senderId : null,
-      content
-    }
+      senderUserId: senderType === "user" ? senderId : null,
+      senderAdminId: senderType === "admin" ? senderId : null,
+      content,
+    },
   });
 };
 
@@ -37,7 +37,7 @@ const getMessageHistory = async (req, res, next) => {
     const session = await getSession(req.user.id);
     const messages = await prisma.chatMessage.findMany({
       where: { sessionId: session.id },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: "asc" },
     });
     res.json({ success: true, data: messages });
   } catch (error) {

@@ -6,7 +6,7 @@
   min-height: 100vh;
   padding: 40px;
   background: var(--bg-body);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   color: var(--text-primary);
 }
 
@@ -60,7 +60,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar-img {
@@ -137,8 +137,8 @@
 
 .premium-input {
   height: 48px;
-  background: rgba(128,128,128,0.05);
-  border: 1px solid rgba(128,128,128,0.2);
+  background: rgba(128, 128, 128, 0.05);
+  border: 1px solid rgba(128, 128, 128, 0.2);
   border-radius: 12px;
   padding: 0 16px;
   color: var(--text-primary);
@@ -147,7 +147,7 @@
   outline: none;
 }
 
-[data-theme='light'] .premium-input {
+[data-theme="light"] .premium-input {
   background: #f8fafc;
 }
 
@@ -191,7 +191,7 @@
 }
 
 .settings-tab:hover {
-  background: rgba(128,128,128,0.05);
+  background: rgba(128, 128, 128, 0.05);
   color: var(--text-primary);
 }
 
@@ -211,7 +211,7 @@
 }
 
 .timeline::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -242,10 +242,10 @@
 }
 
 .timeline-content {
-  background: rgba(128,128,128,0.02);
+  background: rgba(128, 128, 128, 0.02);
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid rgba(128,128,128,0.1);
+  border: 1px solid rgba(128, 128, 128, 0.1);
 }
 
 .timeline-date {

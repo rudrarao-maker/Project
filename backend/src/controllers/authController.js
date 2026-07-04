@@ -1,13 +1,13 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
-const { authenticator } = require('otplib');
-const qrcode = require('qrcode');
-const config = require('../config');
-const ApiResponse = require('../utils/apiResponse');
-const { generateUserId, generateOTP } = require('../utils/generateId');
-const { sendEmail, templates } = require('../services/emailService');
+const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { validationResult } = require("express-validator");
+const { authenticator } = require("otplib");
+const qrcode = require("qrcode");
+const config = require("../config");
+const ApiResponse = require("../utils/apiResponse");
+const { generateUserId, generateOTP } = require("../utils/generateId");
+const { sendEmail, templates } = require("../services/emailService");
 
 const prisma = new PrismaClient();
 
@@ -20,7 +20,7 @@ const setTokenCookie = (res, token) => {
     secure: config.cookie.secure,
     sameSite: config.cookie.sameSite,
     maxAge: config.cookie.maxAge,
-    path: '/',
+    path: "/",
   });
 };
 
@@ -31,7 +31,7 @@ const register = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return ApiResponse.error(res, 'Validation failed', 400, errors.array());
+      return ApiResponse.error(res, "Validation failed", 400, errors.array());
     }
 
     const { name, email, mobile, password, aadhaar } = req.body;
@@ -39,18 +39,20 @@ const register = async (req, res, next) => {
     // Check if email exists in users or admins
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      return ApiResponse.error(res, 'Email already registered', 409);
+      return ApiResponse.error(res, "Email already registered", 409);
     }
 
     const existingMobile = await prisma.user.findUnique({ where: { mobile } });
     if (existingMobile) {
-      return ApiResponse.error(res, 'Mobile number already registered', 409);
+      return ApiResponse.error(res, "Mobile number already registered", 409);
     }
 
     if (aadhaar) {
-      const existingAadhaar = await prisma.user.findUnique({ where: { aadhaarNumber: aadhaar } });
+      const existingAadhaar = await prisma.user.findUnique({
+        where: { aadhaarNumber: aadhaar },
+      });
       if (existingAadhaar) {
-        return ApiResponse.error(res, 'Aadhaar number already registered', 409);
+        return ApiResponse.error(res, "Aadhaar number already registered", 409);
       }
     }
 
@@ -69,7 +71,7 @@ const register = async (req, res, next) => {
         mobile,
         aadhaarNumber: aadhaar || null,
         password: hashedPassword,
-        status: 'active',
+        status: "active",
       },
       select: { id: true, userId: true, name: true, email: true, mobile: true },
     });
@@ -83,33 +85,48 @@ const register = async (req, res, next) => {
         email,
         mobile, // We link mobile too
         otpHash,
-        type: 'email_verification',
-        expiresAt: new Date(Date.now() + config.otp.expiresInMinutes * 60 * 1000),
+        type: "email_verification",
+        expiresAt: new Date(
+          Date.now() + config.otp.expiresInMinutes * 60 * 1000,
+        ),
       },
     });
-    
+
     // MOCK SMS LOGIC: If Twilio was configured, we would send SMS here.
     console.log(`[MOCK SMS] Sending OTP ${otp} to mobile number ${mobile}`);
-    
-    sendEmail(email, templates.otpVerification(name, otp).subject, templates.otpVerification(name, otp).html).catch(() => {});
+
+    sendEmail(
+      email,
+      templates.otpVerification(name, otp).subject,
+      templates.otpVerification(name, otp).html,
+    ).catch(() => {});
 
     // Generate JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: 'user' },
+      { id: user.id, email: user.email, role: "user" },
       config.jwt.secret,
-      { expiresIn: config.jwt.expiresIn }
+      { expiresIn: config.jwt.expiresIn },
     );
 
     // Set token as HttpOnly cookie
     setTokenCookie(res, token);
 
     // Send welcome email (async, don't block)
-    sendEmail(email, templates.registration(name).subject, templates.registration(name).html).catch(() => {});
+    sendEmail(
+      email,
+      templates.registration(name).subject,
+      templates.registration(name).html,
+    ).catch(() => {});
 
-    return ApiResponse.success(res, 'Registration successful! Please verify your email.', {
-      user: { ...user, role: 'user' },
-      requiresVerification: true,
-    }, 201);
+    return ApiResponse.success(
+      res,
+      "Registration successful! Please verify your email.",
+      {
+        user: { ...user, role: "user" },
+        requiresVerification: true,
+      },
+      201,
+    );
   } catch (error) {
     next(error);
   }
@@ -122,7 +139,7 @@ const login = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return ApiResponse.error(res, 'Validation failed', 400, errors.array());
+      return ApiResponse.error(res, "Validation failed", 400, errors.array());
     }
 
     const { email, password } = req.body;
@@ -132,7 +149,7 @@ const login = async (req, res, next) => {
     let isAdmin = false;
 
     const admin = await prisma.admin.findUnique({ where: { email } });
-    if (admin && admin.status === 'active') {
+    if (admin && admin.status === "active") {
       const validPassword = await bcrypt.compare(password, admin.password);
       if (validPassword) {
         user = admin;
@@ -143,8 +160,11 @@ const login = async (req, res, next) => {
     // If not admin, check users table
     if (!user) {
       const regularUser = await prisma.user.findUnique({ where: { email } });
-      if (regularUser && regularUser.status === 'active') {
-        const validPassword = await bcrypt.compare(password, regularUser.password);
+      if (regularUser && regularUser.status === "active") {
+        const validPassword = await bcrypt.compare(
+          password,
+          regularUser.password,
+        );
         if (validPassword) {
           user = regularUser;
         }
@@ -152,13 +172,17 @@ const login = async (req, res, next) => {
     }
 
     if (!user) {
-      return ApiResponse.error(res, 'Invalid email or password', 401);
+      return ApiResponse.error(res, "Invalid email or password", 401);
     }
 
     // Check if 2FA is required for Admin
     if (isAdmin && user.twoFactorEnabled) {
-      const tempToken = jwt.sign({ id: user.id, role: user.role, isTemp: true }, config.jwt.secret, { expiresIn: '5m' });
-      return ApiResponse.success(res, '2FA Verification Required', {
+      const tempToken = jwt.sign(
+        { id: user.id, role: user.role, isTemp: true },
+        config.jwt.secret,
+        { expiresIn: "5m" },
+      );
+      return ApiResponse.success(res, "2FA Verification Required", {
         requires2FA: true,
         tempToken,
       });
@@ -166,39 +190,63 @@ const login = async (req, res, next) => {
 
     // Update last login
     if (isAdmin) {
-      await prisma.admin.update({ where: { id: user.id }, data: { lastLogin: new Date() } });
+      await prisma.admin.update({
+        where: { id: user.id },
+        data: { lastLogin: new Date() },
+      });
     } else {
-      await prisma.user.update({ where: { id: user.id }, data: { lastLogin: new Date() } });
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLogin: new Date() },
+      });
 
       // Record login history for users
-      await prisma.loginHistory.create({
-        data: {
-          userId: user.id,
-          ipAddress: req.ip || req.connection?.remoteAddress || null,
-          userAgent: req.headers?.['user-agent'] || null,
-        },
-      }).catch(() => {});
+      await prisma.loginHistory
+        .create({
+          data: {
+            userId: user.id,
+            ipAddress: req.ip || req.connection?.remoteAddress || null,
+            userAgent: req.headers?.["user-agent"] || null,
+          },
+        })
+        .catch(() => {});
     }
 
     // Generate JWT
     const tokenPayload = {
       id: user.id,
       email: user.email,
-      role: isAdmin ? user.role : 'user',
+      role: isAdmin ? user.role : "user",
     };
-    const token = jwt.sign(tokenPayload, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
+    const token = jwt.sign(tokenPayload, config.jwt.secret, {
+      expiresIn: config.jwt.expiresIn,
+    });
 
     // Set token as HttpOnly cookie
     setTokenCookie(res, token);
 
     // Build response (without password)
     const userData = isAdmin
-      ? { id: user.id, adminId: user.adminId, name: user.name, email: user.email, role: user.role, department: user.department }
-      : { id: user.id, userId: user.userId, name: user.name, email: user.email, role: 'user', mobile: user.mobile };
+      ? {
+          id: user.id,
+          adminId: user.adminId,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          department: user.department,
+        }
+      : {
+          id: user.id,
+          userId: user.userId,
+          name: user.name,
+          email: user.email,
+          role: "user",
+          mobile: user.mobile,
+        };
 
-    return ApiResponse.success(res, 'Login successful', {
+    return ApiResponse.success(res, "Login successful", {
       user: userData,
-      redirect: isAdmin ? '/admin' : '/dashboard',
+      redirect: isAdmin ? "/admin" : "/dashboard",
     });
   } catch (error) {
     next(error);
@@ -214,9 +262,9 @@ const logout = async (req, res) => {
     httpOnly: config.cookie.httpOnly,
     secure: config.cookie.secure,
     sameSite: config.cookie.sameSite,
-    path: '/',
+    path: "/",
   });
-  return ApiResponse.success(res, 'Logged out successfully');
+  return ApiResponse.success(res, "Logged out successfully");
 };
 
 /**
@@ -225,12 +273,15 @@ const logout = async (req, res) => {
 const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    
+
     // Check if user exists
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       // Don't reveal if email exists
-      return ApiResponse.success(res, 'If an account with that email exists, a reset link has been sent.');
+      return ApiResponse.success(
+        res,
+        "If an account with that email exists, a reset link has been sent.",
+      );
     }
 
     // Invalidate existing reset tokens for this email
@@ -241,9 +292,9 @@ const forgotPassword = async (req, res, next) => {
 
     // Generate reset token (JWT-based)
     const resetToken = jwt.sign(
-      { id: user.id, email: user.email, purpose: 'password_reset' },
+      { id: user.id, email: user.email, purpose: "password_reset" },
       config.jwt.secret,
-      { expiresIn: `${config.passwordReset.expiresInMinutes}m` }
+      { expiresIn: `${config.passwordReset.expiresInMinutes}m` },
     );
 
     // Store reset token
@@ -251,15 +302,24 @@ const forgotPassword = async (req, res, next) => {
       data: {
         email,
         token: resetToken,
-        expiresAt: new Date(Date.now() + config.passwordReset.expiresInMinutes * 60 * 1000),
+        expiresAt: new Date(
+          Date.now() + config.passwordReset.expiresInMinutes * 60 * 1000,
+        ),
       },
     });
 
     // Send reset email
     const resetLink = `${config.cors.origin}/reset-password?token=${resetToken}`;
-    sendEmail(email, templates.passwordReset(user.name, resetLink).subject, templates.passwordReset(user.name, resetLink).html).catch(() => {});
+    sendEmail(
+      email,
+      templates.passwordReset(user.name, resetLink).subject,
+      templates.passwordReset(user.name, resetLink).html,
+    ).catch(() => {});
 
-    return ApiResponse.success(res, 'If an account with that email exists, a reset link has been sent.');
+    return ApiResponse.success(
+      res,
+      "If an account with that email exists, a reset link has been sent.",
+    );
   } catch (error) {
     next(error);
   }
@@ -272,7 +332,7 @@ const resetPassword = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return ApiResponse.error(res, 'Validation failed', 400, errors.array());
+      return ApiResponse.error(res, "Validation failed", 400, errors.array());
     }
 
     const { token, newPassword } = req.body;
@@ -282,11 +342,11 @@ const resetPassword = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, config.jwt.secret);
     } catch {
-      return ApiResponse.error(res, 'Invalid or expired reset token', 400);
+      return ApiResponse.error(res, "Invalid or expired reset token", 400);
     }
 
-    if (decoded.purpose !== 'password_reset') {
-      return ApiResponse.error(res, 'Invalid token', 400);
+    if (decoded.purpose !== "password_reset") {
+      return ApiResponse.error(res, "Invalid token", 400);
     }
 
     // Check token in database
@@ -295,7 +355,11 @@ const resetPassword = async (req, res, next) => {
     });
 
     if (!resetRecord) {
-      return ApiResponse.error(res, 'Reset token has expired or already been used', 400);
+      return ApiResponse.error(
+        res,
+        "Reset token has expired or already been used",
+        400,
+      );
     }
 
     // Hash new password
@@ -313,7 +377,10 @@ const resetPassword = async (req, res, next) => {
       data: { used: true },
     });
 
-    return ApiResponse.success(res, 'Password has been reset successfully. You can now log in with your new password.');
+    return ApiResponse.success(
+      res,
+      "Password has been reset successfully. You can now log in with your new password.",
+    );
   } catch (error) {
     next(error);
   }
@@ -327,27 +394,35 @@ const verifyOTP = async (req, res, next) => {
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return ApiResponse.error(res, 'Email and OTP are required', 400);
+      return ApiResponse.error(res, "Email and OTP are required", 400);
     }
 
     // Find latest unused OTP for this email
     const otpRecord = await prisma.oTPVerification.findFirst({
       where: {
         email,
-        type: 'email_verification',
+        type: "email_verification",
         used: false,
         expiresAt: { gt: new Date() },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
     if (!otpRecord) {
-      return ApiResponse.error(res, 'OTP has expired or is invalid. Please request a new one.', 400);
+      return ApiResponse.error(
+        res,
+        "OTP has expired or is invalid. Please request a new one.",
+        400,
+      );
     }
 
     // Check max attempts
     if (otpRecord.attempts >= config.otp.maxAttempts) {
-      return ApiResponse.error(res, 'Too many failed attempts. Please request a new OTP.', 429);
+      return ApiResponse.error(
+        res,
+        "Too many failed attempts. Please request a new OTP.",
+        429,
+      );
     }
 
     // Verify OTP
@@ -358,7 +433,7 @@ const verifyOTP = async (req, res, next) => {
         where: { id: otpRecord.id },
         data: { attempts: otpRecord.attempts + 1 },
       });
-      return ApiResponse.error(res, 'Invalid OTP. Please try again.', 400);
+      return ApiResponse.error(res, "Invalid OTP. Please try again.", 400);
     }
 
     // Mark OTP as used
@@ -375,7 +450,7 @@ const verifyOTP = async (req, res, next) => {
       });
     }
 
-    return ApiResponse.success(res, 'Email verified successfully!');
+    return ApiResponse.success(res, "Email verified successfully!");
   } catch (error) {
     next(error);
   }
@@ -389,29 +464,33 @@ const resendOTP = async (req, res, next) => {
     const { email } = req.body;
 
     if (!email) {
-      return ApiResponse.error(res, 'Email is required', 400);
+      return ApiResponse.error(res, "Email is required", 400);
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      return ApiResponse.error(res, 'No account found with this email', 404);
+      return ApiResponse.error(res, "No account found with this email", 404);
     }
 
     if (user.emailVerified) {
-      return ApiResponse.success(res, 'Email is already verified');
+      return ApiResponse.success(res, "Email is already verified");
     }
 
     // Rate limit: check if OTP was sent in the last 60 seconds
     const recentOTP = await prisma.oTPVerification.findFirst({
       where: {
         email,
-        type: 'email_verification',
+        type: "email_verification",
         createdAt: { gt: new Date(Date.now() - 60 * 1000) },
       },
     });
 
     if (recentOTP) {
-      return ApiResponse.error(res, 'Please wait at least 60 seconds before requesting a new OTP', 429);
+      return ApiResponse.error(
+        res,
+        "Please wait at least 60 seconds before requesting a new OTP",
+        429,
+      );
     }
 
     // Generate new OTP
@@ -423,14 +502,20 @@ const resendOTP = async (req, res, next) => {
         userId: user.id,
         email,
         otpHash,
-        type: 'email_verification',
-        expiresAt: new Date(Date.now() + config.otp.expiresInMinutes * 60 * 1000),
+        type: "email_verification",
+        expiresAt: new Date(
+          Date.now() + config.otp.expiresInMinutes * 60 * 1000,
+        ),
       },
     });
 
-    sendEmail(email, templates.otpVerification(user.name, otp).subject, templates.otpVerification(user.name, otp).html).catch(() => {});
+    sendEmail(
+      email,
+      templates.otpVerification(user.name, otp).subject,
+      templates.otpVerification(user.name, otp).html,
+    ).catch(() => {});
 
-    return ApiResponse.success(res, 'A new OTP has been sent to your email');
+    return ApiResponse.success(res, "A new OTP has been sent to your email");
   } catch (error) {
     next(error);
   }
@@ -440,7 +525,7 @@ const resendOTP = async (req, res, next) => {
  * GET /api/auth/me
  */
 const getMe = async (req, res) => {
-  return ApiResponse.success(res, 'User profile retrieved', { user: req.user });
+  return ApiResponse.success(res, "User profile retrieved", { user: req.user });
 };
 
 /**
@@ -453,25 +538,44 @@ const login2FA = async (req, res, next) => {
     try {
       decoded = jwt.verify(tempToken, config.jwt.secret);
     } catch {
-      return ApiResponse.error(res, 'Invalid or expired temporary token', 400);
+      return ApiResponse.error(res, "Invalid or expired temporary token", 400);
     }
-    
-    if (!decoded.isTemp) return ApiResponse.error(res, 'Invalid token type', 400);
+
+    if (!decoded.isTemp)
+      return ApiResponse.error(res, "Invalid token type", 400);
 
     const admin = await prisma.admin.findUnique({ where: { id: decoded.id } });
-    if (!admin || !admin.twoFactorEnabled) return ApiResponse.error(res, 'Invalid 2FA request', 400);
+    if (!admin || !admin.twoFactorEnabled)
+      return ApiResponse.error(res, "Invalid 2FA request", 400);
 
-    const isValid = authenticator.verify({ token, secret: admin.twoFactorSecret });
-    if (!isValid) return ApiResponse.error(res, 'Invalid 2FA code', 400);
+    const isValid = authenticator.verify({
+      token,
+      secret: admin.twoFactorSecret,
+    });
+    if (!isValid) return ApiResponse.error(res, "Invalid 2FA code", 400);
 
-    await prisma.admin.update({ where: { id: admin.id }, data: { lastLogin: new Date() } });
+    await prisma.admin.update({
+      where: { id: admin.id },
+      data: { lastLogin: new Date() },
+    });
 
-    const finalToken = jwt.sign({ id: admin.id, email: admin.email, role: admin.role }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
+    const finalToken = jwt.sign(
+      { id: admin.id, email: admin.email, role: admin.role },
+      config.jwt.secret,
+      { expiresIn: config.jwt.expiresIn },
+    );
     setTokenCookie(res, finalToken);
 
-    return ApiResponse.success(res, 'Login successful', {
-      user: { id: admin.id, adminId: admin.adminId, name: admin.name, email: admin.email, role: admin.role, department: admin.department },
-      redirect: '/admin',
+    return ApiResponse.success(res, "Login successful", {
+      user: {
+        id: admin.id,
+        adminId: admin.adminId,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        department: admin.department,
+      },
+      redirect: "/admin",
     });
   } catch (error) {
     next(error);
@@ -483,21 +587,26 @@ const login2FA = async (req, res, next) => {
  */
 const setup2FA = async (req, res, next) => {
   try {
-    if (!['super_admin', 'admin', 'officer', 'reviewer'].includes(req.user.role)) {
-      return ApiResponse.error(res, 'Only admins can setup 2FA', 403);
+    if (
+      !["super_admin", "admin", "officer", "reviewer"].includes(req.user.role)
+    ) {
+      return ApiResponse.error(res, "Only admins can setup 2FA", 403);
     }
-    
+
     const admin = await prisma.admin.findUnique({ where: { id: req.user.id } });
     const secret = authenticator.generateSecret();
-    const otpauth = authenticator.keyuri(admin.email, 'GovEServices', secret);
+    const otpauth = authenticator.keyuri(admin.email, "GovEServices", secret);
     const qrCodeUrl = await qrcode.toDataURL(otpauth);
-    
+
     await prisma.admin.update({
       where: { id: req.user.id },
-      data: { twoFactorSecret: secret, twoFactorEnabled: false }
+      data: { twoFactorSecret: secret, twoFactorEnabled: false },
     });
 
-    return ApiResponse.success(res, '2FA setup initiated', { qrCodeUrl, secret });
+    return ApiResponse.success(res, "2FA setup initiated", {
+      qrCodeUrl,
+      secret,
+    });
   } catch (error) {
     next(error);
   }
@@ -510,20 +619,40 @@ const verify2FASetup = async (req, res, next) => {
   try {
     const { token } = req.body;
     const admin = await prisma.admin.findUnique({ where: { id: req.user.id } });
-    if (!admin || !admin.twoFactorSecret) return ApiResponse.error(res, '2FA not initiated', 400);
+    if (!admin || !admin.twoFactorSecret)
+      return ApiResponse.error(res, "2FA not initiated", 400);
 
-    const isValid = authenticator.verify({ token, secret: admin.twoFactorSecret });
-    if (!isValid) return ApiResponse.error(res, 'Invalid verification code', 400);
+    const isValid = authenticator.verify({
+      token,
+      secret: admin.twoFactorSecret,
+    });
+    if (!isValid)
+      return ApiResponse.error(res, "Invalid verification code", 400);
 
     await prisma.admin.update({
       where: { id: admin.id },
-      data: { twoFactorEnabled: true }
+      data: { twoFactorEnabled: true },
     });
 
-    return ApiResponse.success(res, 'Two-Factor Authentication has been successfully enabled.');
+    return ApiResponse.success(
+      res,
+      "Two-Factor Authentication has been successfully enabled.",
+    );
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { register, login, logout, forgotPassword, resetPassword, verifyOTP, resendOTP, getMe, login2FA, setup2FA, verify2FASetup };
+module.exports = {
+  register,
+  login,
+  logout,
+  forgotPassword,
+  resetPassword,
+  verifyOTP,
+  resendOTP,
+  getMe,
+  login2FA,
+  setup2FA,
+  verify2FASetup,
+};

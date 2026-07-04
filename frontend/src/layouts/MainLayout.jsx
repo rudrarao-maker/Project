@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import ModernNavbar from './ModernNavbar';
-import ProfessionalSidebar from './ProfessionalSidebar';
-import ModernFooter from './ModernFooter';
-import CommandPalette from '../components/common/CommandPalette';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import ModernNavbar from "./ModernNavbar";
+import ProfessionalSidebar from "./ProfessionalSidebar";
+import ModernFooter from "./ModernFooter";
+import CommandPalette from "../components/common/CommandPalette";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MainLayout = () => {
   const { isAuthenticated } = useAuth();
@@ -21,10 +21,10 @@ const MainLayout = () => {
       if (mobile) setSidebarOpen(false);
       else setSidebarOpen(true);
     };
-    
+
     handleResize(); // Initial check
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -32,17 +32,19 @@ const MainLayout = () => {
   return (
     <div className="app-wrapper">
       <ModernNavbar toggleSidebar={toggleSidebar} />
-      
+
       <div className="layout-container">
         {isAuthenticated && (
-          <ProfessionalSidebar 
-            isOpen={sidebarOpen} 
+          <ProfessionalSidebar
+            isOpen={sidebarOpen}
             toggleSidebar={toggleSidebar}
             isMobile={isMobile}
           />
         )}
-        
-        <main className={`main-content ${isAuthenticated ? 'with-sidebar' : 'public'}`}>
+
+        <main
+          className={`main-content ${isAuthenticated ? "with-sidebar" : "public"}`}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -50,14 +52,14 @@ const MainLayout = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className={`page-container ${location.pathname === '/' ? 'full-width-page' : ''}`}
+              className={`page-container ${location.pathname === "/" ? "full-width-page" : ""}`}
             >
               <Outlet />
             </motion.div>
           </AnimatePresence>
         </main>
       </div>
-      
+
       <ModernFooter />
       <CommandPalette />
     </div>

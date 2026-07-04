@@ -4,5 +4,7 @@
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px var(--accent-color), 0 0 5px var(--accent-color) !important;
+  box-shadow:
+    0 0 10px var(--accent-color),
+    0 0 5px var(--accent-color) !important;
 }

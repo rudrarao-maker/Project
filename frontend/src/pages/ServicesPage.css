@@ -177,13 +177,18 @@
 }
 
 .service-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--gov-saffron), var(--gov-navy), var(--gov-green));
+  background: linear-gradient(
+    90deg,
+    var(--gov-saffron),
+    var(--gov-navy),
+    var(--gov-green)
+  );
   opacity: 0;
   transition: var(--transition);
 }
@@ -248,15 +253,42 @@
 }
 
 /* Category-specific badge colors */
-.badge-travel { background: #EFF6FF; color: #2563EB; }
-.badge-health { background: #FEF2F2; color: #DC2626; }
-.badge-police { background: #F5F3FF; color: #7C3AED; }
-.badge-transport { background: #FFF7ED; color: #EA580C; }
-.badge-education { background: #ECFDF5; color: #059669; }
-.badge-utility { background: #FFFBEB; color: #D97706; }
-.badge-edistrict { background: #F0F9FF; color: #0284C7; }
-.badge-agriculture { background: #F0FDF4; color: #16A34A; }
-.badge-default { background: #F1F5F9; color: #475569; }
+.badge-travel {
+  background: #eff6ff;
+  color: #2563eb;
+}
+.badge-health {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.badge-police {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+.badge-transport {
+  background: #fff7ed;
+  color: #ea580c;
+}
+.badge-education {
+  background: #ecfdf5;
+  color: #059669;
+}
+.badge-utility {
+  background: #fffbeb;
+  color: #d97706;
+}
+.badge-edistrict {
+  background: #f0f9ff;
+  color: #0284c7;
+}
+.badge-agriculture {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.badge-default {
+  background: #f1f5f9;
+  color: #475569;
+}
 
 /* Loading Skeleton */
 .services-skeleton {
@@ -282,7 +314,12 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    rgba(0, 0, 0, 0.04) 50%,
+    var(--border-color) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   margin-bottom: 14px;
@@ -291,7 +328,12 @@
 .skeleton-line {
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    rgba(0, 0, 0, 0.04) 50%,
+    var(--border-color) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   margin-bottom: 8px;
@@ -301,15 +343,24 @@
   height: 22px;
   width: 80px;
   border-radius: 100px;
-  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--border-color) 25%,
+    rgba(0, 0, 0, 0.04) 50%,
+    var(--border-color) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   margin-top: 4px;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* Empty State */

@@ -1,6 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const { validationResult } = require('express-validator');
-const ApiResponse = require('../utils/apiResponse');
+const { PrismaClient } = require("@prisma/client");
+const { validationResult } = require("express-validator");
+const ApiResponse = require("../utils/apiResponse");
 
 const prisma = new PrismaClient();
 
@@ -13,10 +13,10 @@ const getWallet = async (req, res, next) => {
       where: { userId: req.user.id },
       include: {
         transactions: {
-          orderBy: { createdAt: 'desc' },
-          take: 20
-        }
-      }
+          orderBy: { createdAt: "desc" },
+          take: 20,
+        },
+      },
     });
 
     if (!wallet) {
@@ -25,11 +25,11 @@ const getWallet = async (req, res, next) => {
           userId: req.user.id,
           balance: 0,
         },
-        include: { transactions: true }
+        include: { transactions: true },
       });
     }
 
-    return ApiResponse.success(res, 'Wallet retrieved', wallet);
+    return ApiResponse.success(res, "Wallet retrieved", wallet);
   } catch (error) {
     next(error);
   }
@@ -42,7 +42,7 @@ const addFunds = async (req, res, next) => {
   try {
     const { amount } = req.body;
     if (!amount || amount <= 0) {
-      return ApiResponse.error(res, 'Invalid amount', 400);
+      return ApiResponse.error(res, "Invalid amount", 400);
     }
 
     // In a real app, this would verify a Razorpay/Stripe payment signature first.
@@ -51,22 +51,25 @@ const addFunds = async (req, res, next) => {
     const wallet = await prisma.wallet.upsert({
       where: { userId: req.user.id },
       update: { balance: { increment: amount } },
-      create: { userId: req.user.id, balance: amount }
+      create: { userId: req.user.id, balance: amount },
     });
 
     const transaction = await prisma.transaction.create({
       data: {
         walletId: wallet.id,
-        transactionId: `TXN${Date.now()}${Math.floor(Math.random()*1000)}`,
-        type: 'deposit',
+        transactionId: `TXN${Date.now()}${Math.floor(Math.random() * 1000)}`,
+        type: "deposit",
         amount,
         balanceAfter: wallet.balance,
-        description: 'Wallet top-up (Mock Payment)',
-        status: 'completed'
-      }
+        description: "Wallet top-up (Mock Payment)",
+        status: "completed",
+      },
     });
 
-    return ApiResponse.success(res, 'Funds added successfully', { wallet, transaction });
+    return ApiResponse.success(res, "Funds added successfully", {
+      wallet,
+      transaction,
+    });
   } catch (error) {
     next(error);
   }

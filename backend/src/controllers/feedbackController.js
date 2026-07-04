@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const ApiResponse = require('../utils/apiResponse');
+const { PrismaClient } = require("@prisma/client");
+const ApiResponse = require("../utils/apiResponse");
 
 const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ const submitFeedback = async (req, res, next) => {
     const { serviceId, applicationId, rating, comment } = req.body;
 
     if (!rating || rating < 1 || rating > 5) {
-      return ApiResponse.error(res, 'Rating must be between 1 and 5', 400);
+      return ApiResponse.error(res, "Rating must be between 1 and 5", 400);
     }
 
     const feedback = await prisma.feedback.create({
@@ -22,7 +22,12 @@ const submitFeedback = async (req, res, next) => {
       },
     });
 
-    return ApiResponse.success(res, 'Thank you for your feedback!', { feedback }, 201);
+    return ApiResponse.success(
+      res,
+      "Thank you for your feedback!",
+      { feedback },
+      201,
+    );
   } catch (error) {
     next(error);
   }
@@ -38,7 +43,7 @@ const getServiceFeedback = async (req, res, next) => {
       prisma.feedback.findMany({
         where: { serviceId },
         include: { user: { select: { name: true } } },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip: (parseInt(page) - 1) * parseInt(limit),
         take: parseInt(limit),
       }),
@@ -52,11 +57,16 @@ const getServiceFeedback = async (req, res, next) => {
       _count: true,
     });
 
-    return ApiResponse.paginated(res, 'Feedback retrieved', {
-      feedbacks,
-      averageRating: avgResult._avg.rating || 0,
-      totalReviews: avgResult._count,
-    }, { page: parseInt(page), limit: parseInt(limit), total });
+    return ApiResponse.paginated(
+      res,
+      "Feedback retrieved",
+      {
+        feedbacks,
+        averageRating: avgResult._avg.rating || 0,
+        totalReviews: avgResult._count,
+      },
+      { page: parseInt(page), limit: parseInt(limit), total },
+    );
   } catch (error) {
     next(error);
   }
@@ -67,10 +77,10 @@ const getMyFeedback = async (req, res, next) => {
   try {
     const feedbacks = await prisma.feedback.findMany({
       where: { userId: req.user.id },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: 50,
     });
-    return ApiResponse.success(res, 'Your feedback retrieved', { feedbacks });
+    return ApiResponse.success(res, "Your feedback retrieved", { feedbacks });
   } catch (error) {
     next(error);
   }

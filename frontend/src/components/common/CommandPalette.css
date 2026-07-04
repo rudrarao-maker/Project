@@ -22,7 +22,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(128, 128, 128, 0.2);
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .command-search-header {
@@ -81,7 +81,8 @@
   transition: all 0.2s ease;
 }
 
-.command-item:hover, .command-item.active {
+.command-item:hover,
+.command-item.active {
   background: rgba(59, 130, 246, 0.1);
   color: #3b82f6;
 }
@@ -97,7 +98,8 @@
   flex-shrink: 0;
 }
 
-.command-item:hover .command-item-icon, .command-item.active .command-item-icon {
+.command-item:hover .command-item-icon,
+.command-item.active .command-item-icon {
   background: rgba(59, 130, 246, 0.2);
 }
 

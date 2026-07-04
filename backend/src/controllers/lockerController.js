@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const ApiResponse = require('../utils/apiResponse');
+const { PrismaClient } = require("@prisma/client");
+const ApiResponse = require("../utils/apiResponse");
 
 const prisma = new PrismaClient();
 
@@ -10,9 +10,9 @@ const getLockerItems = async (req, res, next) => {
   try {
     const items = await prisma.digitalLockerItem.findMany({
       where: { userId: req.user.id },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: "desc" },
     });
-    return ApiResponse.success(res, 'Locker items retrieved', items);
+    return ApiResponse.success(res, "Locker items retrieved", items);
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,7 @@ const getLockerItems = async (req, res, next) => {
 const addItem = async (req, res, next) => {
   try {
     if (!req.file) {
-      return ApiResponse.error(res, 'File is required', 400);
+      return ApiResponse.error(res, "File is required", 400);
     }
 
     const { name, category, issuedBy } = req.body;
@@ -34,16 +34,16 @@ const addItem = async (req, res, next) => {
         userId: req.user.id,
         documentId: `DOC${Date.now()}`,
         name: name || req.file.originalname,
-        category: category || 'other',
+        category: category || "other",
         filePath: `/uploads/${req.file.filename}`,
         fileType: req.file.mimetype,
         fileSize: req.file.size,
         issuedBy,
-        isVerified: false // Admin can verify later if needed
-      }
+        isVerified: false, // Admin can verify later if needed
+      },
     });
 
-    return ApiResponse.success(res, 'Document added to locker', item, 201);
+    return ApiResponse.success(res, "Document added to locker", item, 201);
   } catch (error) {
     next(error);
   }
@@ -57,14 +57,15 @@ const deleteItem = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const item = await prisma.digitalLockerItem.findUnique({ where: { id } });
 
-    if (!item) return ApiResponse.error(res, 'Item not found', 404);
-    if (item.userId !== req.user.id) return ApiResponse.error(res, 'Unauthorized', 403);
+    if (!item) return ApiResponse.error(res, "Item not found", 404);
+    if (item.userId !== req.user.id)
+      return ApiResponse.error(res, "Unauthorized", 403);
 
     await prisma.digitalLockerItem.delete({ where: { id } });
-    
+
     // In a real app, also delete the physical file using fs.unlink
-    
-    return ApiResponse.success(res, 'Item removed from locker');
+
+    return ApiResponse.success(res, "Item removed from locker");
   } catch (error) {
     next(error);
   }

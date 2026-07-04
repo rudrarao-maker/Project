@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
-const ApiResponse = require('../utils/apiResponse');
-const { generateGrievanceNumber } = require('../utils/generateId');
-const { sendEmail, templates } = require('../services/emailService');
+const { PrismaClient } = require("@prisma/client");
+const ApiResponse = require("../utils/apiResponse");
+const { generateGrievanceNumber } = require("../utils/generateId");
+const { sendEmail, templates } = require("../services/emailService");
 
 const prisma = new PrismaClient();
 
@@ -11,7 +11,11 @@ const submitGrievance = async (req, res, next) => {
     const { subject, description, category, applicationId } = req.body;
 
     if (!subject || !description) {
-      return ApiResponse.error(res, 'Subject and description are required', 400);
+      return ApiResponse.error(
+        res,
+        "Subject and description are required",
+        400,
+      );
     }
 
     const grievanceNumber = generateGrievanceNumber();
@@ -24,8 +28,8 @@ const submitGrievance = async (req, res, next) => {
         subject,
         description,
         category: category || null,
-        status: 'open',
-        priority: 'medium',
+        status: "open",
+        priority: "medium",
       },
     });
 
@@ -40,19 +44,24 @@ const submitGrievance = async (req, res, next) => {
     await prisma.notification.create({
       data: {
         userId: req.user.id,
-        recipientType: 'user',
-        type: 'in_app',
-        recipient: user?.email || '',
-        subject: 'Grievance Registered',
+        recipientType: "user",
+        type: "in_app",
+        recipient: user?.email || "",
+        subject: "Grievance Registered",
         message: `Your grievance ${grievanceNumber} has been registered. We will review it shortly.`,
-        status: 'sent',
+        status: "sent",
       },
     });
 
-    return ApiResponse.success(res, 'Grievance submitted successfully', {
-      grievanceNumber,
-      id: grievance.id,
-    }, 201);
+    return ApiResponse.success(
+      res,
+      "Grievance submitted successfully",
+      {
+        grievanceNumber,
+        id: grievance.id,
+      },
+      201,
+    );
   } catch (error) {
     next(error);
   }
@@ -63,25 +72,37 @@ const getMyGrievances = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
     const where = { userId: req.user.id };
-    if (status && status !== 'all') where.status = status;
+    if (status && status !== "all") where.status = status;
 
     const [grievances, total] = await Promise.all([
       prisma.grievance.findMany({
         where,
         include: {
-          application: { select: { applicationNumber: true, service: { select: { name: true } } } },
+          application: {
+            select: {
+              applicationNumber: true,
+              service: { select: { name: true } },
+            },
+          },
           assignedTo: { select: { name: true, department: true } },
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         skip: (parseInt(page) - 1) * parseInt(limit),
         take: parseInt(limit),
       }),
       prisma.grievance.count({ where }),
     ]);
 
-    return ApiResponse.paginated(res, 'Grievances retrieved', { grievances }, {
-      page: parseInt(page), limit: parseInt(limit), total,
-    });
+    return ApiResponse.paginated(
+      res,
+      "Grievances retrieved",
+      { grievances },
+      {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+      },
+    );
   } catch (error) {
     next(error);
   }
@@ -93,13 +114,18 @@ const getGrievanceById = async (req, res, next) => {
     const grievance = await prisma.grievance.findFirst({
       where: { id: parseInt(req.params.id), userId: req.user.id },
       include: {
-        application: { select: { applicationNumber: true, service: { select: { name: true } } } },
+        application: {
+          select: {
+            applicationNumber: true,
+            service: { select: { name: true } },
+          },
+        },
         assignedTo: { select: { name: true, department: true } },
       },
     });
 
-    if (!grievance) return ApiResponse.error(res, 'Grievance not found', 404);
-    return ApiResponse.success(res, 'Grievance retrieved', { grievance });
+    if (!grievance) return ApiResponse.error(res, "Grievance not found", 404);
+    return ApiResponse.success(res, "Grievance retrieved", { grievance });
   } catch (error) {
     next(error);
   }

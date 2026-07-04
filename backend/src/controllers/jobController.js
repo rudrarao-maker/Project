@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 exports.getJobs = async (req, res, next) => {
@@ -13,20 +13,20 @@ exports.getJobs = async (req, res, next) => {
     if (state) where.state = state;
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { department: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { title: { contains: search, mode: "insensitive" } },
+        { department: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
       ];
     }
 
     const jobs = await prisma.job.findMany({
       where,
-      orderBy: { deadline: 'asc' },
+      orderBy: { deadline: "asc" },
       take: limit ? parseInt(limit) : undefined,
     });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { jobs },
     });
   } catch (error) {
@@ -41,11 +41,11 @@ exports.getJob = async (req, res, next) => {
     });
 
     if (!job) {
-      return res.status(404).json({ status: 'fail', message: 'Job not found' });
+      return res.status(404).json({ status: "fail", message: "Job not found" });
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { job },
     });
   } catch (error) {
