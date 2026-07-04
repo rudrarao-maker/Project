@@ -6,8 +6,6 @@ import {
   UserCheck,
   UserX,
   Clock,
-  MoreVertical,
-  ShieldAlert,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import "../Dashboard.css";
@@ -25,6 +23,7 @@ export default function AdminUsers() {
 
   useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, filterStatus, searchTerm]);
 
   const fetchUsers = async () => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { adminService } from "../../services/dataService";
-import { Shield, Save } from "lucide-react";
+import { Shield } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import "../Dashboard.css";

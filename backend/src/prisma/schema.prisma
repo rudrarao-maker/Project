@@ -203,6 +203,7 @@ model Admin {
   assignedGrievances   Grievance[]      @relation("GrievanceAssignedTo")
   chatSessions         ChatSession[]    @relation("ChatSessionAdmin")
   sentChatMessages     ChatMessage[]    @relation("MessageSenderAdmin")
+  tasks                Task[]           @relation("AdminTasks")
 
   @@index([adminId])
   @@index([email])
@@ -250,6 +251,7 @@ model User {
   digitalLocker DigitalLockerItem[]
   chatSessions  ChatSession[]
   sentChatMessages ChatMessage[]    @relation("MessageSenderUser")
+  tasks         Task[]           @relation("UserTasks")
 
   @@index([userId])
   @@index([email])
@@ -749,4 +751,24 @@ model ChatMessage {
 
   @@index([sessionId])
   @@map("chat_messages")
+}
+
+model Task {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(255)
+  description  String?   @db.Text
+  status       String    @default("pending") // pending, in_progress, completed
+  priority     String    @default("medium") // low, medium, high
+  assignedToId Int?      @map("assigned_to_id")
+  userId       Int?      @map("user_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  assignedTo   Admin?    @relation("AdminTasks", fields: [assignedToId], references: [id], onDelete: SetNull)
+  user         User?     @relation("UserTasks", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([assignedToId])
+  @@index([userId])
+  @@index([status])
+  @@map("tasks")
 }

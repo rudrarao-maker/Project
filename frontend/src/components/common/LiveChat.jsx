@@ -6,7 +6,7 @@ import { chatService } from "../../services/dataService";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function LiveChat() {
-  const { user, getCookie } = useAuth();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");

@@ -18,6 +18,7 @@ import {
   Leaf,
   FileText,
   ChevronRight,
+  ChevronLeft,
   MapPin,
   Sparkles,
   ShieldCheck,
@@ -96,50 +97,33 @@ const HomePage = () => {
 
   const sliderData = [
     {
-      image:
-        "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80",
-      title: "Government Services",
-      subtitle: "Access hundreds of essential government services seamlessly.",
+      image: "https://cdn.digitalindiacorporation.in/wp-content/uploads/2026/07/Digital-India-Web-Banner-English-1.png",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      title: "Welfare Schemes",
-      subtitle:
-        "Discover central and state government schemes tailored for you.",
+      image: "https://static2.india.gov.in/npiprod/uploads/large_Bharat_innovates_banner_e9734077e4.jpeg",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1565019058727-4c7fa255b8eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      title: "Citizen Services",
-      subtitle: "Your documents, applications, and payments all in one place.",
+      image: "https://cdn.digitalindiacorporation.in/wp-content/uploads/2025/04/DI-Web-Banner-2-3.png",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1585936529565-187154564c74?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      title: "Digital India",
-      subtitle:
-        "Empowering citizens with digital literacy and secure identity.",
+      image: "https://static2.india.gov.in/npiprod/uploads/large_Bal_Vivah_Mukt_Bharat_Campaign_f9ac091f70.jpg",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      title: "Employment Services",
-      subtitle:
-        "Find the latest government job opportunities and recruitments.",
-    },
-    {
-      image:
-        "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      title: "State Government Services",
-      subtitle:
-        "Connecting every state and union territory through a unified platform.",
-    },
+      image: "https://cdn.digitalindiacorporation.in/wp-content/uploads/2026/02/UX4G-banner-for-events-page.png",
+    }
   ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + sliderData.length) % sliderData.length);
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+      nextSlide();
     }, 6000);
     return () => clearInterval(timer);
   }, [sliderData.length]);
@@ -233,6 +217,51 @@ const HomePage = () => {
     },
   ];
 
+    const FALLBACK_NEWS = [
+    {
+      id: "n1",
+      title: "Government Launches New Digital Portal for Farmers",
+      summary: "A unified portal to help farmers access subsidies and scheme information instantly.",
+      createdAt: "2026-07-01T10:00:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1595841697227-ea01a88b5093?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "n2",
+      title: "e-Shram Portal Crosses 30 Crore Registrations",
+      summary: "Major milestone achieved for unorganized workers' welfare and social security.",
+      createdAt: "2026-06-28T14:30:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "n3",
+      title: "PM-KISAN 16th Installment Released",
+      summary: "Over 9 crore farmers receive financial assistance directly in their bank accounts.",
+      createdAt: "2026-06-25T09:15:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "n4",
+      title: "New Update to DigiLocker Announced",
+      summary: "Citizens can now access property documents and vehicle RC instantly.",
+      createdAt: "2026-06-20T11:00:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "n5",
+      title: "UMANG App Adds 50 New State Services",
+      summary: "The unified mobile app for new-age governance gets a major upgrade.",
+      createdAt: "2026-06-18T16:45:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "n6",
+      title: "Jan Aushadhi Kendras Expand to All Districts",
+      summary: "Affordable, high-quality generic medicines now available nationwide.",
+      createdAt: "2026-06-15T08:20:00Z",
+      imageUrl: "https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    }
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -248,11 +277,12 @@ const HomePage = () => {
 
         setServices(sData && sData.length > 0 ? sData : FALLBACK_SERVICES);
         setSchemes(schData && schData.length > 0 ? schData : FALLBACK_SCHEMES);
-        setNews(nData && nData.length > 0 ? nData : []);
+        setNews(nData && nData.length > 0 ? nData : FALLBACK_NEWS);
       } catch (err) {
         console.error(err);
         setServices(FALLBACK_SERVICES);
         setSchemes(FALLBACK_SCHEMES);
+        setNews(FALLBACK_NEWS);
       } finally {
         setLoading(false);
       }
@@ -319,42 +349,27 @@ const HomePage = () => {
               }}
             />
           </AnimatePresence>
-          {/* Glass Overlay over Slider */}
-          <div className="hero-slider-overlay"></div>
+          {/* Glass Overlay over Slider - removed to show banner clearly */}
+          {/* <div className="hero-slider-overlay"></div> */}
         </motion.div>
 
+        {/* Navigation Arrows */}
+        <button className="slider-arrow left-arrow" onClick={prevSlide}>
+          <ChevronLeft size={32} />
+        </button>
+        <button className="slider-arrow right-arrow" onClick={nextSlide}>
+          <ChevronRight size={32} />
+        </button>
+
         <motion.div
-          className="hero-premium-content"
+          className="hero-premium-content !pt-0 justify-end pb-4"
           initial="hidden"
           animate="show"
           variants={staggerContainer}
+          style={{ height: '100%', minHeight: '85vh', paddingBottom: '20px' }}
         >
-          <motion.div variants={fadeInUp} className="premium-badge glass-panel">
-            <Sparkles size={16} className="text-accent-glow" />
-            <span>National Citizen Services Platform</span>
-            <div className="badge-shine"></div>
-          </motion.div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`title-${currentSlide}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="hero-premium-title text-shadow-glow">
-                {sliderData[currentSlide].title} <br />
-                <span className="gradient-text">Made Easy</span>
-              </h1>
-              <p className="hero-premium-subtitle text-shadow-glow">
-                {sliderData[currentSlide].subtitle}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-          <motion.div variants={scaleUp} className="search-command-center">
-            <form onSubmit={handleSearch} className="premium-search-form">
+          <motion.div variants={scaleUp} className="search-command-center w-full max-w-4xl mx-auto mt-auto transform translate-y-8">
+            <form onSubmit={handleSearch} className="premium-search-form shadow-2xl bg-white/95 backdrop-blur-md">
               <Search className="premium-search-icon" size={24} />
               <input
                 type="text"
@@ -812,6 +827,120 @@ const HomePage = () => {
               alt="Person using mobile app"
               className="benefits-promo-image"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* 5.5 VIDEO GUIDES & TUTORIALS */}
+      <section className="premium-section bg-gray-50/50">
+        <div className="premium-container">
+          <div className="section-header-modern text-center flex-col justify-center mb-12">
+            <h2>Video Guides & Tutorials</h2>
+            <p>Learn how to use various government services with our step-by-step guides.</p>
+          </div>
+
+          <div className="video-grid">
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/M7lc1UVf-VE" 
+                title="How to register for Digital India Services" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">How to use Digital India Portal</h3>
+                <p className="text-sm text-gray-600 mt-2">A complete step-by-step registration guide.</p>
+              </div>
+            </div>
+
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/jNQXAC9IVRw" 
+                title="Umang App Tutorial" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">UMANG App Registration</h3>
+                <p className="text-sm text-gray-600 mt-2">Access hundreds of services on your mobile.</p>
+              </div>
+            </div>
+
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/tgbNymZ7vqY" 
+                title="DigiLocker Setup" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">Setup your DigiLocker</h3>
+                <p className="text-sm text-gray-600 mt-2">Securely store your documents in the cloud.</p>
+              </div>
+            </div>
+
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/K4TOrB7at0Y" 
+                title="Apply for PAN Card" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">Apply for Services Online</h3>
+                <p className="text-sm text-gray-600 mt-2">Learn how to fill and submit application forms.</p>
+              </div>
+            </div>
+
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/5aC4jHhJ6-o" 
+                title="Aadhaar Card Update Tutorial" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">Update Aadhaar Details</h3>
+                <p className="text-sm text-gray-600 mt-2">How to update address and mobile number online.</p>
+              </div>
+            </div>
+
+            <div className="video-card glass-panel">
+              <iframe 
+                width="100%" 
+                height="215" 
+                src="https://www.youtube.com/embed/rV3j7b6FvI4" 
+                title="Ayushman Bharat Guide" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+                className="rounded-t-xl"
+              ></iframe>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg text-[var(--gov-navy)]">Ayushman Bharat Guide</h3>
+                <p className="text-sm text-gray-600 mt-2">Step-by-step process for health card benefits.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

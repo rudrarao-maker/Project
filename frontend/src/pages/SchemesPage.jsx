@@ -3,7 +3,6 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  ChevronRight as ArrowRight,
   SlidersHorizontal,
   TrendingUp,
   Sprout,
@@ -23,6 +22,7 @@ import {
 import { schemeService } from "../services/dataService";
 import { INDIAN_STATES } from "../utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
+import { addRecentlyVisited } from "../utils/recentVisits";
 import "./SchemesPage.css";
 
 const GRADIENT_CLASSES = [
@@ -454,6 +454,7 @@ export default function SchemesPage() {
                   target="_blank"
                   rel="noreferrer"
                   className="explore-card"
+                  onClick={() => addRecentlyVisited(scheme)}
                   variants={fadeIn}
                 >
                   <div className="explore-card-icon blue">
@@ -529,6 +530,7 @@ export default function SchemesPage() {
                   target="_blank"
                   rel="noreferrer"
                   className={`recommended-card ${GRADIENT_CLASSES[idx % GRADIENT_CLASSES.length]}`}
+                  onClick={() => addRecentlyVisited(scheme)}
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.08, duration: 0.4 }}
@@ -578,6 +580,7 @@ export default function SchemesPage() {
                   target="_blank"
                   rel="noreferrer"
                   className="trending-card"
+                  onClick={() => addRecentlyVisited(scheme)}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.06, duration: 0.35 }}
@@ -631,7 +634,7 @@ export default function SchemesPage() {
                   animate="show"
                   exit={{ opacity: 0 }}
                 >
-                  {CATEGORY_DATA.map((cat, idx) => {
+                  {CATEGORY_DATA.map((cat, _idx) => {
                     const Icon = cat.icon;
                     const count = Object.entries(categoryCounts).reduce(
                       (sum, [key, val]) => {

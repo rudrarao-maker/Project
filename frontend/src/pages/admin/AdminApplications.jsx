@@ -4,8 +4,6 @@ import toast from "react-hot-toast";
 import {
   Search,
   Eye,
-  CheckCircle,
-  XCircle,
   Clock,
   FileText,
   Check,
@@ -29,6 +27,7 @@ export default function AdminApplications() {
 
   useEffect(() => {
     fetchApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.page, filterStatus, searchTerm]);
 
   const fetchApplications = async () => {
@@ -61,7 +60,7 @@ export default function AdminApplications() {
       setSelectedApp(null);
       setRemarks("");
       fetchApplications();
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to update status");
     }
   };

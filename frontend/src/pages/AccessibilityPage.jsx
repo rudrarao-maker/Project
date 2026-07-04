@@ -1,4 +1,4 @@
-import { Eye, Keyboard, Type, CheckCircle } from "lucide-react";
+import { Eye, Keyboard, Type } from "lucide-react";
 
 export default function AccessibilityPage() {
   return (

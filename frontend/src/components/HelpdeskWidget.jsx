@@ -5,8 +5,7 @@ import {
   X,
   Bot,
   User,
-  Send,
-  MessageSquare
+  Send
 } from "lucide-react";
 import { faqService } from "../services/dataService";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +31,7 @@ export default function HelpdeskWidget() {
     if (isOpen && faqs.length === 0) {
       fetchFaqs();
     }
-  }, [isOpen]);
+  }, [isOpen, faqs.length]);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,7 +43,7 @@ export default function HelpdeskWidget() {
     try {
       const res = await faqService.getAll({ search: "" });
       setFaqs(res.data.data || []);
-    } catch (error) {
+    } catch (_error) {
       console.error("Failed to load FAQs");
     }
   };

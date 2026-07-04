@@ -29,6 +29,7 @@ const appointmentRoutes = require("./routes/appointmentRoutes");
 const walletRoutes = require("./routes/walletRoutes");
 const lockerRoutes = require("./routes/lockerRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const taskRoutes = require("./routes/taskRoutes");
 
 const app = express();
 
@@ -106,6 +107,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/locker", lockerRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/tasks", taskRoutes);
 app.use("/api", publicRoutes);
 
 // ============================================================================

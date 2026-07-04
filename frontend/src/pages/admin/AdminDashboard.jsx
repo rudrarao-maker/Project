@@ -48,7 +48,6 @@ export default function AdminDashboard() {
   // 2FA State
   const [show2FA, setShow2FA] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
-  const [setupSecret, setSetupSecret] = useState("");
   const [token2FA, setToken2FA] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
 

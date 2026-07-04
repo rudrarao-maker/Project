@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const config = require("../config");
+const otpGenerator = require("otp-generator");
 
 // Create transporter (will fail gracefully if not configured)
 let transporter = null;
@@ -159,4 +160,15 @@ const templates = {
   }),
 };
 
-module.exports = { sendEmail, templates };
+/**
+ * Generate a 6-digit OTP
+ */
+const generateOTP = () => {
+  return otpGenerator.generate(6, {
+    upperCaseAlphabets: false,
+    specialChars: false,
+    lowerCaseAlphabets: false,
+  });
+};
+
+module.exports = { sendEmail, templates, generateOTP };

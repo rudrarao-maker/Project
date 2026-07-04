@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Search,
   ChevronLeft,
@@ -18,12 +18,12 @@ import {
   Wifi,
   FileText,
   Globe,
-  Truck,
   IndianRupee,
   Package,
 } from "lucide-react";
 import { serviceService } from "../services/dataService";
 import { motion, AnimatePresence } from "framer-motion";
+import { addRecentlyVisited } from "../utils/recentVisits";
 import "./ServicesPage.css";
 
 const CATEGORIES = [
@@ -526,6 +526,7 @@ export default function ServicesPage() {
                 target="_blank"
                 rel="noreferrer"
                 className="service-card"
+                onClick={() => addRecentlyVisited(svc)}
                 variants={fadeInUp}
                 layout
               >

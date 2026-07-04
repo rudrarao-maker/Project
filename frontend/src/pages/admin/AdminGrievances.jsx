@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { adminService } from "../../services/dataService";
 import { AlertTriangle, CheckCircle2, ArrowUpCircle } from "lucide-react";
-import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import "../Dashboard.css";
 
@@ -20,6 +19,7 @@ export default function AdminGrievances() {
 
   useEffect(() => {
     fetchGrievances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
   const fetchGrievances = async () => {

@@ -29,6 +29,7 @@ export default function AdminSchemes() {
 
   useEffect(() => {
     fetchSchemes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSchemes = async () => {

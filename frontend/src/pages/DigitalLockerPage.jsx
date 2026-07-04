@@ -94,12 +94,9 @@ export default function DigitalLockerPage() {
         animate={{ opacity: 1, y: 0 }}
       >
         <div>
-          <h1 className="dashboard-title flex items-center gap-2">
-            <ShieldCheck className="text-gov-green" /> Digital Locker
-          </h1>
-          <p className="dashboard-subtitle">
-            Securely store your verified documents for instant use in
-            applications
+          <h1 className="text-3xl font-bold mb-2">File Manager</h1>
+          <p className="text-gray-100 opacity-90">
+            Securely upload and manage your important documents.
           </p>
         </div>
       </motion.div>
@@ -181,7 +178,7 @@ export default function DigitalLockerPage() {
         >
           <div className="dashboard-panel h-full">
             <div className="panel-header">
-              <h2 className="panel-title">My Vault</h2>
+              <h2 className="text-xl font-bold mb-4">Upload New File</h2>
             </div>
             <div className="p-6">
               {documents.length === 0 ? (

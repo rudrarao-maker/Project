@@ -36,6 +36,7 @@ import UserActivityPage from "./pages/UserActivityPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import WalletPage from "./pages/WalletPage";
 import DigitalLockerPage from "./pages/DigitalLockerPage";
+import UserTasks from "./pages/UserTasks";
 
 // Admin Protected Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -47,6 +48,8 @@ import AdminJobs from "./pages/admin/AdminJobs";
 import AdminGrievances from "./pages/admin/AdminGrievances";
 import AdminRoles from "./pages/admin/AdminRoles";
 import AdminLiveChat from "./pages/admin/AdminLiveChat";
+import AdminTasks from "./pages/admin/AdminTasks";
+import AdminFileManager from "./pages/admin/AdminFileManager";
 
 // Information & Policy Pages
 import AboutPage from "./pages/AboutPage";
@@ -109,6 +112,15 @@ function App() {
         <GlobalModals />
         <Routes>
           <Route element={<MainLayout />}>
+            <Route
+              path="/tasks"
+              element={
+                <ProtectedRoute>
+                  <UserTasks />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Auth */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -241,7 +253,6 @@ function App() {
               }
             />
 
-            {/* Admin */}
             <Route
               path="/admin"
               element={
@@ -263,6 +274,22 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminApplications />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/tasks"
+              element={
+                <AdminRoute>
+                  <AdminTasks />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/files"
+              element={
+                <AdminRoute>
+                  <AdminFileManager />
                 </AdminRoute>
               }
             />

@@ -16,7 +16,7 @@ import {
   AlertTriangle,
   List,
   Shield,
-  Bell,
+  Wallet,
   MessageSquare,
 } from "lucide-react";
 import clsx from "clsx";
@@ -33,7 +33,6 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
       icon: <FileText size={20} />,
     },
     { name: "Digital Locker", path: "/locker", icon: <Shield size={20} /> },
-    { name: "Wallet", path: "/wallet", icon: <BarChart2 size={20} /> },
     {
       name: "Grievances",
       path: "/grievances",
@@ -74,10 +73,13 @@ const ProfessionalSidebar = ({ isOpen, toggleSidebar, isMobile }) => {
       path: "/admin/chat",
       icon: <MessageSquare size={20} />,
     },
+    { name: "Tasks", path: "/admin/tasks", icon: <CheckSquare size={20} /> },
+    { name: "File Manager", path: "/admin/files", icon: <FileText size={20} /> },
   ];
 
   const appLinks = [
-    { name: "File Manager", path: "/files", icon: <File size={20} /> },
+    { name: "My Wallet", path: "/wallet", icon: <Wallet size={20} /> },
+    { name: "File Manager", path: "/locker", icon: <FileText size={20} /> },
     { name: "Tasks", path: "/tasks", icon: <CheckSquare size={20} /> },
   ];
 

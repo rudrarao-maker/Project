@@ -2,12 +2,9 @@ import { useState } from "react";
 import { trackService } from "../services/dataService";
 import {
   Search,
-  Clock,
   CheckCircle2,
   XCircle,
-  AlertCircle,
   ArrowRight,
-  FileText,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
