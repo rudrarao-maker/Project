@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "schemes": "Schemes",
+    "jobs": "Gov Jobs",
+    "track": "Track App",
+    "contact": "Contact"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "search": {
+    "placeholder": "Search services, schemes (Ctrl+K)..."
+  }
+}

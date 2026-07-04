@@ -1,0 +1,570 @@
+/* ============================================================================
+   SCHEMES PAGE — UMANG-STYLE
+   ============================================================================ */
+
+/* Hero */
+.schemes-hero {
+  background: var(--bg-primary);
+  padding: 48px 24px 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.schemes-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.schemes-hero .hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 600px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+/* Search Bar */
+.schemes-search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 720px;
+  margin: 0 auto 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  transition: var(--transition);
+}
+
+.schemes-search-bar:focus-within {
+  border-color: var(--gov-navy);
+  box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.08);
+}
+
+.schemes-search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: transparent;
+  font-family: inherit;
+}
+
+.schemes-search-bar input::placeholder {
+  color: var(--text-muted);
+}
+
+.schemes-search-bar .search-btn {
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.schemes-search-bar .search-btn:hover {
+  color: var(--gov-navy);
+}
+
+/* Explore Eligible CTA */
+.schemes-explore-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.schemes-explore-cta:hover {
+  border-color: var(--gov-navy);
+  box-shadow: var(--shadow-sm);
+}
+
+.schemes-explore-cta .cta-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.schemes-explore-cta .cta-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gov-navy);
+}
+
+.schemes-explore-cta .cta-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* ============================================================================
+   SECTION SHARED
+   ============================================================================ */
+.schemes-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.view-all-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gov-navy);
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.view-all-count {
+  color: var(--gov-saffron);
+  font-weight: 700;
+}
+
+.carousel-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.carousel-nav button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  font-size: 0;
+}
+
+.carousel-nav button:hover {
+  background: var(--bg-secondary);
+  border-color: var(--gov-navy);
+  color: var(--gov-navy);
+}
+
+/* ============================================================================
+   RECOMMENDED SCHEMES CAROUSEL
+   ============================================================================ */
+.recommended-carousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+}
+
+.recommended-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.recommended-card {
+  min-width: 320px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 140px;
+}
+
+.recommended-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.recommended-card.gradient-purple {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 60%, #5B21B6 100%);
+}
+
+.recommended-card.gradient-blue {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 60%, #1D4ED8 100%);
+}
+
+.recommended-card.gradient-teal {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 60%, #0F766E 100%);
+}
+
+.recommended-card.gradient-orange {
+  background: linear-gradient(135deg, #F97316 0%, #EA580C 60%, #C2410C 100%);
+}
+
+.recommended-card.gradient-rose {
+  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 60%, #BE123C 100%);
+}
+
+.recommended-card.gradient-indigo {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 60%, #4338CA 100%);
+}
+
+/* Decorative background shapes */
+.recommended-card::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.recommended-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 40%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.recommended-card .dept-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  width: fit-content;
+  letter-spacing: 0.2px;
+}
+
+.recommended-card .scheme-name {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================================
+   TRENDING SCHEMES
+   ============================================================================ */
+.trending-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+}
+
+.trending-row::-webkit-scrollbar {
+  display: none;
+}
+
+.trending-card {
+  min-width: 300px;
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.trending-card:hover {
+  border-color: var(--gov-navy);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.trending-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trending-icon svg {
+  color: #EA580C;
+}
+
+.trending-info h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.trending-info p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ============================================================================
+   EXPLORE SCHEMES — TABS + CATEGORY GRID
+   ============================================================================ */
+.explore-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+}
+
+.explore-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.explore-tab {
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.explore-tab:hover {
+  border-color: var(--gov-navy);
+  color: var(--gov-navy);
+}
+
+.explore-tab.active {
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-color: var(--gov-navy);
+}
+
+/* Category Cards Grid */
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.explore-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.explore-card:hover {
+  border-color: var(--gov-navy);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.explore-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.explore-card-icon.green { background: #ECFDF5; color: #059669; }
+.explore-card-icon.orange { background: #FFF7ED; color: #EA580C; }
+.explore-card-icon.purple { background: #F5F3FF; color: #7C3AED; }
+.explore-card-icon.red { background: #FEF2F2; color: #DC2626; }
+.explore-card-icon.blue { background: #EFF6FF; color: #2563EB; }
+.explore-card-icon.cyan { background: #ECFEFF; color: #0891B2; }
+.explore-card-icon.amber { background: #FFFBEB; color: #D97706; }
+.explore-card-icon.slate { background: #F1F5F9; color: #475569; }
+.explore-card-icon.pink { background: #FDF2F8; color: #DB2777; }
+.explore-card-icon.emerald { background: #F0FDF4; color: #16A34A; }
+
+.explore-card-info h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+
+.explore-card-info .scheme-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.explore-card-info .scheme-count span {
+  color: var(--gov-saffron);
+  margin-right: 3px;
+}
+
+/* Loading */
+.schemes-skeleton-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.schemes-skeleton-card {
+  flex: 1;
+  border-radius: 14px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  min-height: 140px;
+  overflow: hidden;
+}
+
+.schemes-skeleton-card .shimmer-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Empty State */
+.schemes-empty {
+  text-align: center;
+  padding: 60px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.schemes-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.schemes-empty h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.schemes-empty p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+@media (max-width: 992px) {
+  .explore-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .recommended-card {
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schemes-hero h1 {
+    font-size: 1.6rem;
+  }
+  .explore-grid {
+    grid-template-columns: 1fr;
+  }
+  .recommended-card {
+    min-width: 260px;
+  }
+  .trending-card {
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .schemes-hero {
+    padding: 32px 16px 24px;
+  }
+  .schemes-section,
+  .explore-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .recommended-card {
+    min-width: 240px;
+    min-height: 120px;
+    padding: 18px;
+  }
+}

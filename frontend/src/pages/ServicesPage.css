@@ -1,0 +1,410 @@
+/* ============================================================================
+   SERVICES PAGE — UMANG-STYLE
+   ============================================================================ */
+
+/* Hero */
+.services-hero {
+  background: var(--bg-primary);
+  padding: 48px 24px 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.services-hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.services-hero .hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 600px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+/* Search Bar */
+.services-search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 720px;
+  margin: 0 auto 24px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  transition: var(--transition);
+}
+
+.services-search-bar:focus-within {
+  border-color: var(--gov-navy);
+  box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.08);
+}
+
+.services-search-bar .search-icon {
+  padding: 0 16px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.services-search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 14px 0;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  background: transparent;
+  font-family: inherit;
+}
+
+.services-search-bar input::placeholder {
+  color: var(--text-muted);
+}
+
+.services-search-bar .search-dropdown {
+  padding: 10px 20px;
+  border: none;
+  border-left: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  min-width: 80px;
+}
+
+/* Category Pills */
+.services-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.services-category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.services-pill-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.services-pill-nav button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.services-pill-nav button:hover {
+  background: var(--bg-secondary);
+  color: var(--gov-navy);
+}
+
+.category-pill {
+  padding: 8px 20px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+.category-pill:hover {
+  border-color: var(--gov-navy);
+  color: var(--gov-navy);
+  background: rgba(0, 0, 128, 0.04);
+}
+
+.category-pill.active {
+  background: var(--gov-navy);
+  color: #ffffff;
+  border-color: var(--gov-navy);
+}
+
+/* Service Cards Grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gov-saffron), var(--gov-navy), var(--gov-green));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.service-card:hover {
+  border-color: var(--gov-navy);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.service-card:hover::before {
+  opacity: 1;
+}
+
+.service-card-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.service-card:hover .service-card-icon {
+  border-color: rgba(0, 0, 128, 0.2);
+  transform: scale(1.05);
+}
+
+.service-card-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.service-card-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 36px;
+}
+
+.service-card-badge {
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Category-specific badge colors */
+.badge-travel { background: #EFF6FF; color: #2563EB; }
+.badge-health { background: #FEF2F2; color: #DC2626; }
+.badge-police { background: #F5F3FF; color: #7C3AED; }
+.badge-transport { background: #FFF7ED; color: #EA580C; }
+.badge-education { background: #ECFDF5; color: #059669; }
+.badge-utility { background: #FFFBEB; color: #D97706; }
+.badge-edistrict { background: #F0F9FF; color: #0284C7; }
+.badge-agriculture { background: #F0FDF4; color: #16A34A; }
+.badge-default { background: #F1F5F9; color: #475569; }
+
+/* Loading Skeleton */
+.services-skeleton {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.skeleton-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skeleton-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 14px;
+}
+
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 8px;
+}
+
+.skeleton-badge {
+  height: 22px;
+  width: 80px;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--border-color) 25%, rgba(0,0,0,0.04) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-top: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Empty State */
+.services-empty {
+  text-align: center;
+  padding: 80px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.services-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.services-empty h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.services-empty p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* Result Count */
+.services-result-bar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.services-result-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.services-result-count span {
+  font-weight: 700;
+  color: var(--gov-navy);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+@media (max-width: 1200px) {
+  .services-grid,
+  .services-skeleton {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .services-grid,
+  .services-skeleton {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .services-hero h1 {
+    font-size: 1.6rem;
+  }
+  .services-grid,
+  .services-skeleton {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 24px 16px;
+  }
+  .service-card-icon {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .services-grid,
+  .services-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 16px 12px;
+  }
+  .services-hero {
+    padding: 32px 16px 24px;
+  }
+}

@@ -1,0 +1,11 @@
+- `[x]` Phase 4: Admin CRUD & Operations
+  - `[x]` Build `adminController.js` logic for bulk updates, services, schemes, and grievance management.
+  - `[x]` Create new Admin frontend pages for Services, Schemes, Jobs, Grievances, and Roles.
+- `[x]` Phase 6: Polish & Frontend Additions
+  - `[x]` Global Search Component (`GlobalSearchModal.jsx`).
+  - `[x]` Interactive Chatbot Widget (`ChatbotWidget.jsx`).
+  - `[x]` Document Preview Modal for admins and users.
+  - `[x]` Replace all placeholders (FAQ, Cancellations, Accessibility, User Manual, Video Guides).
+  - `[x]` Final UI adjustments in `App.jsx`, `ModernNavbar`, `ProfessionalSidebar`.
+- `[x]` Finalization
+  - `[x]` Run `prisma migrate dev` to push the new database schema.
