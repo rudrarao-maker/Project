@@ -1,9 +1,4 @@
-databases:
-  # 1. PostgreSQL Database
-  - name: gov-eservices-db
-    databaseName: gov_eservices
-    user: admin
-    plan: free
+
 
 services:
   # 2. Node.js Backend API
@@ -17,9 +12,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: gov-eservices-db
-          property: connectionString
+        value: "postgresql://neondb_owner:npg_jZkAN9ars6MS@ep-shy-meadow-at60n6a6-pooler.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
