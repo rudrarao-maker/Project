@@ -1,6 +1,6 @@
 services:
   # 1. PostgreSQL Database
-  - type: psql
+  - type: pg4sql
     name: gov-eservices-db
     databaseName: gov_eservices
     user: admin
