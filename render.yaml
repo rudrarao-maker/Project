@@ -3,16 +3,12 @@ databases:
   - name: gov-eservices-db
     databaseName: gov_eservices
     user: admin
-    region: singapore # Change as needed based on your users
-    plan: free
 
 services:
   # 2. Node.js Backend API
   - type: web
     name: gov-eservices-api
     env: node
-    plan: free
-    region: singapore
     buildCommand: "cd backend && npm install && npm run prisma:generate && npm run prisma:push && npm run seed"
     startCommand: "cd backend && npm start"
     envVars:
@@ -31,7 +27,6 @@ services:
   - type: web
     name: gov-eservices-portal
     env: static
-    plan: free
     buildCommand: "cd frontend && npm install && npm run build"
     staticPublishPath: "./frontend/dist"
     envVars:
