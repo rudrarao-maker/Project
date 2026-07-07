@@ -49,4 +49,8 @@ module.exports = {
   passwordReset: {
     expiresInMinutes: 60, // 1 hour
   },
+
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || "",
+  },
 };

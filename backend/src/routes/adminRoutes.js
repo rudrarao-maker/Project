@@ -29,12 +29,16 @@ const {
   updateGrievanceStatus,
   getAdminRoles,
   updateAdminPermissions,
+  getAdvancedAnalytics,
 } = require("../controllers/adminController");
 
-router.use(authenticate, authorizeAdmin);
+const auditLogger = require("../middleware/auditLogger");
+
+router.use(authenticate, authorizeAdmin, auditLogger);
 
 // Dashboard
 router.get("/dashboard", getDashboardStats);
+router.get("/advanced-analytics", getAdvancedAnalytics);
 
 // Users
 router.get("/users", getAllUsers);

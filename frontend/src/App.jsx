@@ -50,6 +50,7 @@ import AdminRoles from "./pages/admin/AdminRoles";
 import AdminLiveChat from "./pages/admin/AdminLiveChat";
 import AdminTasks from "./pages/admin/AdminTasks";
 import AdminFileManager from "./pages/admin/AdminFileManager";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 
 // Information & Policy Pages
 import AboutPage from "./pages/AboutPage";
@@ -258,6 +259,14 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/analytics"
+              element={
+                <AdminRoute>
+                  <AdminAnalytics />
                 </AdminRoute>
               }
             />

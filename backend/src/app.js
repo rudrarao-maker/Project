@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const config = require("./config");
 const errorHandler = require("./middleware/errorHandler");
+const { swaggerUi, specs } = require("./docs/swagger");
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
@@ -86,8 +87,10 @@ if (config.nodeEnv !== "production") {
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
 // ============================================================================
-// API ROUTES
+// API ROUTES & DOCS
 // ============================================================================
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/services", serviceRoutes);

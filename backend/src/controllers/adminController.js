@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const ApiResponse = require("../utils/apiResponse");
 const { sendEmail, templates } = require("../services/emailService");
 const { logActivity } = require("../services/auditService");
+const { appendQRAndSignatureToPDF } = require("../utils/documentUtils");
 
 const prisma = new PrismaClient();
 
@@ -153,6 +154,65 @@ const getDashboardStats = async (req, res, next) => {
       })),
       topServices: topServicesRaw,
       statusDistribution,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** GET /api/admin/advanced-analytics */
+const getAdvancedAnalytics = async (req, res, next) => {
+  try {
+    // 1. User Demographics (Example: Active vs Inactive)
+    const userStatusCounts = await prisma.user.groupBy({
+      by: ['status'],
+      _count: { id: true }
+    });
+
+    // 2. Applications by Service
+    const applicationsByServiceRaw = await prisma.$queryRaw`
+      SELECT s.name, COUNT(sa.id)::int as count
+      FROM services s
+      LEFT JOIN service_applications sa ON s.id = sa.service_id
+      GROUP BY s.id, s.name
+      ORDER BY count DESC
+    `;
+
+    // 3. Application Approval Rate over time (Last 30 days)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const applicationsLast30Days = await prisma.application.findMany({
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      select: { status: true, createdAt: true }
+    });
+
+    const approvalRateData = applicationsLast30Days.reduce((acc, app) => {
+      const date = app.createdAt.toISOString().split('T')[0];
+      if (!acc[date]) acc[date] = { total: 0, approved: 0 };
+      acc[date].total++;
+      if (app.status === 'approved') acc[date].approved++;
+      return acc;
+    }, {});
+
+    // Format for charts
+    const timeSeriesData = Object.entries(approvalRateData).map(([date, data]) => ({
+      date,
+      approvalRate: data.total > 0 ? (data.approved / data.total) * 100 : 0,
+      total: data.total
+    })).sort((a, b) => a.date.localeCompare(b.date));
+
+    // 4. Grievance Status
+    const grievanceStatusCounts = await prisma.grievance.groupBy({
+      by: ['status'],
+      _count: { id: true }
+    });
+
+    return ApiResponse.success(res, "Advanced analytics retrieved", {
+      userDemographics: userStatusCounts,
+      applicationsByService: applicationsByServiceRaw,
+      approvalRateTimeSeries: timeSeriesData,
+      grievances: grievanceStatusCounts,
     });
   } catch (error) {
     next(error);
@@ -455,6 +515,18 @@ const reviewDocument = async (req, res, next) => {
     });
     if (!document) return ApiResponse.error(res, "Document not found", 404);
 
+    let updatedFilePath = document.filePath;
+    if (status === "approved" && document.filePath) {
+      try {
+        const result = await appendQRAndSignatureToPDF(document.filePath, document.id, document.user.id);
+        if (result && result.certPath) {
+          updatedFilePath = result.certPath;
+        }
+      } catch (err) {
+        console.error("Failed to append QR/Signature:", err);
+      }
+    }
+
     await prisma.document.update({
       where: { id: documentId },
       data: {
@@ -462,6 +534,7 @@ const reviewDocument = async (req, res, next) => {
         adminRemarks: remarks || null,
         reviewedById: req.user.id,
         reviewedAt: new Date(),
+        filePath: updatedFilePath, // update if modified
       },
     });
 
@@ -1191,4 +1264,5 @@ module.exports = {
   updateGrievanceStatus,
   getAdminRoles,
   updateAdminPermissions,
+  getAdvancedAnalytics,
 };

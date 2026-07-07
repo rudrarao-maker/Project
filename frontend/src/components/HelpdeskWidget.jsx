@@ -48,7 +48,7 @@ export default function HelpdeskWidget() {
     }
   };
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -57,49 +57,29 @@ export default function HelpdeskWidget() {
     setInput("");
     setChatLoading(true);
 
-    // AI Logic based on FAQs
-    setTimeout(() => {
-      const query = userMessage.text.toLowerCase();
-      let bestMatch = null;
-      let maxScore = 0;
-
-      faqs.forEach((faq) => {
-        let score = 0;
-        const q = faq.question.toLowerCase();
-        const a = faq.answer.toLowerCase();
-
-        const words = query.split(" ");
-        words.forEach((w) => {
-          if (w.length > 3 && (q.includes(w) || a.includes(w))) score++;
-        });
-
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = faq;
-        }
+    // Connect to backend AI
+    try {
+      const response = await fetch("/api/chat/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token")}` },
+        body: JSON.stringify({ message: userMessage.text })
       });
-
+      
+      const data = await response.json();
+      
       let botMessage = { id: Date.now() + 1, type: "bot" };
-
-      if (maxScore > 0) {
-        botMessage.text = `Here is what I found regarding your question:\n\n**${bestMatch.question}**\n${bestMatch.answer}`;
-      } else if (query.includes("track") || query.includes("status")) {
-        botMessage.text =
-          "You can track the status of your application on the tracking page.";
-        botMessage.action = { label: "Track Application", link: "/track" };
-      } else if (query.includes("contact") || query.includes("help")) {
-        botMessage.text =
-          "You can reach out to our support team through the Contact page.";
-        botMessage.action = { label: "Contact Support", link: "/contact" };
+      if (data.success) {
+        botMessage.text = data.data.content;
       } else {
-        botMessage.text =
-          "I'm sorry, I couldn't find a specific answer for that. You might want to try rephrasing your question or contact support.";
-        botMessage.action = { label: "Contact Support", link: "/contact" };
+        botMessage.text = "I'm sorry, there was an error processing your request. Please try again.";
       }
-
+      
       setMessages((prev) => [...prev, botMessage]);
+    } catch (err) {
+      setMessages((prev) => [...prev, { id: Date.now()+1, type: "bot", text: "Network error connecting to AI." }]);
+    } finally {
       setChatLoading(false);
-    }, 1000);
+    }
   };
 
   const handleAction = (link) => {

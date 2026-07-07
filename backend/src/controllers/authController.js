@@ -515,6 +515,9 @@ const resendOTP = async (req, res, next) => {
       templates.otpVerification(user.name, otp).html,
     ).catch(() => {});
 
+    // MOCK SMS LOGIC
+    console.log(`[MOCK SMS] Sending OTP ${otp} to mobile number ${user.mobile}`);
+
     return ApiResponse.success(res, "A new OTP has been sent to your email");
   } catch (error) {
     next(error);

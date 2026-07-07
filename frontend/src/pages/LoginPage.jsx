@@ -7,6 +7,8 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
+  Camera,
+  X,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -17,6 +19,8 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [showFaceAuth, setShowFaceAuth] = useState(false);
+  const [faceAuthStatus, setFaceAuthStatus] = useState("scanning"); // scanning, success, failed
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +38,24 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFaceAuth = () => {
+    setShowFaceAuth(true);
+    setFaceAuthStatus("scanning");
+    // Simulate Face Scanning Delay
+    setTimeout(() => {
+      setFaceAuthStatus("success");
+      setTimeout(() => {
+        toast.success("Face Authentication successful!");
+        // Mocking login for the demo user
+        login({ email: "test@example.com", password: "password" })
+          .then((user) => {
+             navigate(["super_admin", "admin", "officer", "reviewer"].includes(user?.role) ? "/admin" : "/dashboard");
+          })
+          .catch(() => setShowFaceAuth(false));
+      }, 1500);
+    }, 3000);
   };
 
   return (
@@ -146,6 +168,20 @@ const LoginPage = () => {
                 </>
               )}
             </button>
+            
+            <div className="auth-divider" style={{ textAlign: "center", margin: "24px 0", color: "#64748b", fontSize: "14px", position: "relative" }}>
+               <span style={{ background: "white", padding: "0 10px", position: "relative", zIndex: 1 }}>OR</span>
+               <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", background: "#e2e8f0", zIndex: 0 }}></div>
+            </div>
+
+            <button
+              type="button"
+              className="auth-btn-secondary"
+              style={{ width: "100%", padding: "12px", background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: "8px", display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", fontWeight: 600, color: "var(--gov-blue)", cursor: "pointer" }}
+              onClick={handleFaceAuth}
+            >
+              <Camera size={18} /> Login with Face Authentication
+            </button>
           </form>
 
           <div className="auth-footer">
@@ -174,6 +210,44 @@ const LoginPage = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Face Authentication Modal */}
+      {showFaceAuth && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, backdropFilter: "blur(5px)" }}>
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            style={{ background: "white", padding: "32px", borderRadius: "16px", width: "400px", textAlign: "center", position: "relative" }}
+          >
+            <button onClick={() => setShowFaceAuth(false)} style={{ position: "absolute", top: "16px", right: "16px", background: "none", border: "none", cursor: "pointer", color: "#64748b" }}>
+              <X size={24} />
+            </button>
+            <h3 style={{ marginTop: 0, color: "var(--gov-navy)", marginBottom: "24px" }}>Face Authentication</h3>
+            
+            <div style={{ width: "200px", height: "200px", margin: "0 auto", borderRadius: "50%", border: `4px solid ${faceAuthStatus === 'success' ? '#10b981' : 'var(--gov-blue)'}`, position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: "#f1f5f9" }}>
+               {faceAuthStatus === "scanning" && (
+                 <>
+                   <Camera size={48} color="#94a3b8" />
+                   <motion.div 
+                     animate={{ top: ["0%", "100%", "0%"] }}
+                     transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                     style={{ position: "absolute", left: 0, right: 0, height: "4px", background: "rgba(14, 165, 233, 0.5)", boxShadow: "0 0 10px rgba(14,165,233,0.8)" }}
+                   />
+                 </>
+               )}
+               {faceAuthStatus === "success" && (
+                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                   <CheckCircle2 size={64} color="#10b981" />
+                 </motion.div>
+               )}
+            </div>
+            
+            <div style={{ marginTop: "24px", fontSize: "16px", fontWeight: 500, color: faceAuthStatus === 'success' ? '#10b981' : '#64748b' }}>
+              {faceAuthStatus === "scanning" ? "Scanning your face... Please hold still." : "Face verified successfully! Logging you in..."}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

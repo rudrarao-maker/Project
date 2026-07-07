@@ -137,6 +137,7 @@ const ModernNavbar = ({ toggleSidebar }) => {
             <button
               className="icon-btn"
               title="Accessibility"
+              onClick={() => navigate("/accessibility")}
               style={{ color: "var(--text-secondary)" }}
             >
               <Accessibility size={18} />

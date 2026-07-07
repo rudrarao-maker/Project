@@ -57,6 +57,7 @@ export const notificationService = {
 
 export const adminService = {
   getDashboard: () => api.get("/admin/dashboard"),
+  getAdvancedAnalytics: () => api.get("/admin/advanced-analytics"),
   getUsers: (params) => api.get("/admin/users", { params }),
   toggleUserStatus: (id, status) =>
     api.put(`/admin/users/${id}/status`, { status }),
